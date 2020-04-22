@@ -7,7 +7,7 @@ from typing import List
 import json
 import requests
 
-class Metadata(BaseModel):
+class SubjectClinicalData(BaseModel):
     collection: str
     patient_id: str
     disease_type: str
@@ -29,8 +29,8 @@ def make_sparql_query(query, params={}):
 
 app = FastAPI()
 
-@app.get("/", response_model=List[Metadata])
-def query_all_metadata(collection: str = None, disease_type: str = None, location: str = None):
+@app.get("/", response_model=List[SubjectClinicalData])
+def query_all_clinical_data(collection: str = None, disease_type: str = None, location: str = None):
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
 PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
 PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
@@ -73,7 +73,7 @@ select ?collection ?patient_id ?disease_type ?location{
     return make_sparql_query(query)
 
 @app.get("/locations")
-def locations():
+def list_all_locations():
     query = """PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
@@ -95,7 +95,7 @@ select distinct ?location{
     return [x['location'] for x in results]
 
 @app.get("/disease_types")
-def disease_types():
+def list_all_disease_types():
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
 PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
 PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
@@ -117,7 +117,7 @@ select distinct ?disease_type {
     return [x['disease_type'] for x in results]
 
 @app.get("/collections")
-def collections():
+def list_all_collections():
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
 PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
