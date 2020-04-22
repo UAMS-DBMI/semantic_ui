@@ -31,6 +31,9 @@ app = FastAPI()
 
 @app.get("/", response_model=List[SubjectClinicalData])
 def query_all_clinical_data(collection: str = None, disease_type: str = None, location: str = None):
+    """This is the main endpoint to query all of the loaded clinical data.
+
+    As we add additional fields there will be additional parameters that will allow filtering."""
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
 PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
 PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
@@ -70,10 +73,30 @@ select ?collection ?patient_id ?disease_type ?location{
     }
 
 }"""
-    return make_sparql_query(query)
+    ret = make_sparql_query(query)
+    if collection is not None:
+        filter = []
+        for row in ret:
+            if(row['collection'] == collection):
+                filter.append(row)
+        ret = filter
+    if disease_type is not None:
+        filter = []
+        for row in ret:
+            if(row['disease_type'] == disease_type):
+                filter.append(row)
+        ret = filter
+    if location is not None:
+        filter = []
+        for row in ret:
+            if(row['location'] == location):
+                filter.append(row)
+        ret = filter
+    return ret
 
 @app.get("/locations")
 def list_all_locations():
+    """List all of the physical locations associated with clinical data."""
     query = """PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
@@ -96,6 +119,7 @@ select distinct ?location{
 
 @app.get("/disease_types")
 def list_all_disease_types():
+    """List all of the disease types avaliable in the clinical data."""
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
 PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
 PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
@@ -118,6 +142,7 @@ select distinct ?disease_type {
 
 @app.get("/collections")
 def list_all_collections():
+    """List all collections which currently have clinical data."""
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
 PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
