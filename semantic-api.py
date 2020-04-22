@@ -13,6 +13,10 @@ class SubjectClinicalData(BaseModel):
     disease_type: str
     location: str
 
+class RDFClass(BaseModel):
+    label: str
+    uri: str
+
 def make_sparql_query(query, params={}):
     params = {'query': query}
     headers = {'Accept': 'application/sparql-results+json'}
@@ -94,7 +98,7 @@ select ?collection ?patient_id ?disease_type ?location{
         ret = filter
     return ret
 
-@app.get("/locations")
+@app.get("/locations", response_model=List[RDFClass])
 def list_all_locations():
     """List all of the physical locations associated with clinical data."""
     query = """PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
@@ -102,22 +106,22 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
 PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-select distinct ?location{
+select distinct ?label ?uri {
 	# the person
 	?person rdf:type human: .
     # parts of this person
- 	?person has_part: ?ppart .
-    ?ppart rdf:type ?loctype .
-    ?loctype rdfs:label ?location .
+ 	?person has_part: ?lt .
+    ?lt rdf:type ?uri .
+    ?uri rdfs:label ?label .
     # want only the immediate location type -- not superclasses like 'organ subunit'
     FILTER NOT EXISTS{
-        ?x rdfs:subClassOf ?loctype.
+        ?x rdfs:subClassOf ?uri.
     }
 }"""
     results = make_sparql_query(query)
-    return [x['location'] for x in results]
+    return results
 
-@app.get("/disease_types")
+@app.get("/disease_types", response_model=List[RDFClass])
 def list_all_disease_types():
     """List all of the disease types avaliable in the clinical data."""
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
@@ -126,19 +130,18 @@ PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-select distinct ?disease_type {
+select distinct ?label ?uri {
 	# the person
 	?person rdf:type human: .
     ?dis_inst inheres: ?ppart .
-    ?dis_inst rdf:type ?dt .
-    ?dt rdfs:label ?disease_type .
+    ?dis_inst rdf:type ?uri .
+    ?uri rdfs:label ?label .
     # want only the immediate diease type
     FILTER NOT EXISTS{
-        ?x rdfs:subClassOf ?dt.
+        ?x rdfs:subClassOf ?uri .
     }
 }"""
-    results = make_sparql_query(query)
-    return [x['disease_type'] for x in results]
+    return make_sparql_query(query)
 
 @app.get("/collections")
 def list_all_collections():
