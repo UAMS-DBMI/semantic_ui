@@ -1,0 +1,48 @@
+PREFIX collection: <http://purl.org/PRISM_0000001> 
+PREFIX malesex: <http://purl.obolibrary.org/obo/PATO_0000384>
+PREFIX femalesex: <http://purl.obolibrary.org/obo/PATO_0000383>
+PREFIX phensex: <http://purl.obolibrary.org/obo/PATO_0001894>
+PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052> 
+PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000> 
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219> 
+PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?cname ?idl ?dtl ?loctypel ?sexlabel{
+    
+    # the collection
+    ?cid rdf:type collection: .
+    ?cid rdfs:label ?cname .
+    
+    # the person
+    ?person rdf:type human: .
+
+    # the person identifier 
+    ?id denotes: ?person . 
+    ?id rdf:type identifier: . 
+    ?id rdfs:label ?idl .
+    
+    # the person's sex
+    ?sex inheres: ?person .
+    ?sex rdf:type ?sexclass .
+    ?sexclass rdfs:label ?sexlabel .
+    
+    # parts of this person
+    ?person has_part: ?ppart .
+    ?ppart rdf:type ?loctype . 
+    ?loctype rdfs:label ?loctypel .
+    # want only the immediate location type -- not superclasses like 'organ subunit'
+    FILTER NOT EXISTS{
+        ?x rdfs:subClassOf ?loctype.
+    }
+    
+    ?dis_inst inheres: ?ppart .
+    ?dis_inst rdf:type ?disease_type .
+    ?disease_type rdfs:label ?dtl .
+    # want only the immediate diease type
+    FILTER NOT EXISTS{
+        ?x rdfs:subClassOf ?disease_type.
+    }
+
+} 

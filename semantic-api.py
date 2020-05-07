@@ -7,15 +7,17 @@ from typing import List
 import json
 import requests
 
+class RDFClass(BaseModel):
+    label: str
+    uri: str
+
 class SubjectClinicalData(BaseModel):
     collection: str
     patient_id: str
     disease_type: str
     location: str
+    sexlabel: str = None
 
-class RDFClass(BaseModel):
-    label: str
-    uri: str
 
 def make_sparql_query(query, params={}):
     params = {'query': query}
@@ -27,14 +29,18 @@ def make_sparql_query(query, params={}):
     for row in r.json()['results']['bindings']:
         new_row = {}
         for var in vars:
-            new_row[var] = row[var]['value']
+            if var in row.keys():
+                new_row[var] = row[var]['value']
         ret.append(new_row)
     return ret
 
 app = FastAPI()
 
 @app.get("/", response_model=List[SubjectClinicalData])
-def query_all_clinical_data(collection: str = None, disease_type: str = None, location: str = None):
+def query_all_clinical_data(collection: str = None,
+                            disease_type: str = None,
+                            location: str = None,
+                            sexlabel: str = None):
     """This is the main endpoint to query all of the loaded clinical data.
 
     As we add additional fields there will be additional parameters that will allow filtering."""
@@ -46,7 +52,7 @@ PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
 PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
 PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-select ?collection ?patient_id ?disease_type ?location{
+select ?collection ?patient_id ?disease_type ?location ?sexlabel {
 
     # the collection
     ?cid rdf:type collection: .
@@ -58,6 +64,13 @@ select ?collection ?patient_id ?disease_type ?location{
     ?id denotes: ?person .
     ?id rdf:type identifier: .
     ?id rdfs:label ?patient_id .
+
+    optional {
+        # the person's sex
+        ?sex inheres: ?person .
+        ?sex rdf:type ?sexclass .
+        ?sexclass rdfs:label ?sexlabel .
+    }
 
     # parts of this person
  	?person has_part: ?ppart .
@@ -94,6 +107,12 @@ select ?collection ?patient_id ?disease_type ?location{
         filter = []
         for row in ret:
             if(row['location'] == location):
+                filter.append(row)
+        ret = filter
+    if sexlabel is not None:
+        filter = []
+        for row in ret:
+            if(row.get('sexlabel') == sexlabel):
                 filter.append(row)
         ret = filter
     return ret
