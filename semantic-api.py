@@ -17,6 +17,7 @@ class SubjectClinicalData(BaseModel):
     disease_type: str
     location: str
     sexlabel: str = None
+    age: int = None
 
 
 def make_sparql_query(query, params={}):
@@ -52,7 +53,8 @@ PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
 PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
 PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-select ?collection ?patient_id ?disease_type ?location ?sexlabel {
+PREFIX age: <http://purl.obolibrary.org/obo/PATO_0000011>
+select ?collection ?patient_id ?disease_type ?location ?sexlabel ?age {
 
     # the collection
     ?cid rdf:type collection: .
@@ -70,6 +72,13 @@ select ?collection ?patient_id ?disease_type ?location ?sexlabel {
         ?sex inheres: ?person .
         ?sex rdf:type ?sexclass .
         ?sexclass rdfs:label ?sexlabel .
+    }
+
+    optional{
+        # the person's age
+        ?agex inheres: ?person .
+        ?agex rdf:type age: .
+        ?agex rdfs:label ?age .
     }
 
     # parts of this person
