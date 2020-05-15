@@ -14,11 +14,11 @@ class RDFClass(BaseModel):
 class SubjectClinicalData(BaseModel):
     collection: str
     patient_id: str
-    disease_type: str
+    disease_type: str = None
     location: str
     sexlabel: str = None
     age: int = None
-
+    stagelabel: str = None
 
 def make_sparql_query(query, params={}):
     params = {'query': query}
@@ -46,6 +46,14 @@ def query_all_clinical_data(collection: str = None,
 
     As we add additional fields there will be additional parameters that will allow filtering."""
     query = """PREFIX collection: <http://purl.org/PRISM_0000001>
+PREFIX subject_id: <http://purl.org/PRISM_0000002>
+PREFIX diseasestage: <http://purl.obolibrary.org/obo/NCIT_C28108>
+PREFIX diseasedisorderfinding: <http://purl.obolibrary.org/obo/NCIT_C7057>
+PREFIX about: <http://purl.obolibrary.org/obo/IAO_0000136>
+PREFIX age: <http://purl.obolibrary.org/obo/PATO_0000011>
+PREFIX malesex: <http://purl.obolibrary.org/obo/PATO_0000384>
+PREFIX femalesex: <http://purl.obolibrary.org/obo/PATO_0000383>
+PREFIX phensex: <http://purl.obolibrary.org/obo/PATO_0001894>
 PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
 PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -53,51 +61,73 @@ PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
 PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
 PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX age: <http://purl.obolibrary.org/obo/PATO_0000011>
-select ?collection ?patient_id ?disease_type ?location ?sexlabel ?age {
+select distinct ?collection ?patient_id ?sexlabel ?age ?location ?disease_type ?stagelabel{
 
-    # the collection
-    ?cid rdf:type collection: .
-    ?cid rdfs:label ?collection .
-
-	# the person
-	?person rdf:type human: .
-	# the person identifier
+    # the subject identifier
     ?id denotes: ?person .
-    ?id rdf:type identifier: .
+    ?id rdf:type subject_id: .
     ?id rdfs:label ?patient_id .
 
-    optional {
+    # collection, collection name
+    ?c rdf:type collection: .
+    ?c rdfs:label ?collection .
+
+    # collections have subject ids as parts
+    ?c has_part: ?id .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    optional{
         # the person's sex
         ?sex inheres: ?person .
         ?sex rdf:type ?sexclass .
+        ?sexclass rdfs:subClassOf phensex: .
         ?sexclass rdfs:label ?sexlabel .
     }
 
     optional{
         # the person's age
-        ?agex inheres: ?person .
-        ?agex rdf:type age: .
-        ?agex rdfs:label ?age .
+        ?ag inheres: ?person .
+        ?ag rdf:type age: .
+        ?ag rdfs:label ?age .
     }
 
-    # parts of this person
- 	?person has_part: ?ppart .
-    ?ppart rdf:type ?loctype .
-    ?loctype rdfs:label ?location .
-    # want only the immediate location type -- not superclasses like 'organ subunit'
-    FILTER NOT EXISTS{
-        ?x rdfs:subClassOf ?loctype.
+    optional{
+        # parts of this person
+        ?person has_part: ?ppart .
+        ?ppart rdf:type ?loctype .
+        ?loctype rdfs:label ?location .
+        # want only the immediate location type -- not superclasses like 'organ subunit'
+        FILTER NOT EXISTS{
+            ?ppart rdf:type ?x .
+            ?x rdfs:subClassOf ?loctype.
+            filter (?x != ?loctype)
+        }
     }
 
-    ?dis_inst inheres: ?ppart .
-    ?dis_inst rdf:type ?dt .
-    ?dt rdfs:label ?disease_type .
-    # want only the immediate diease type
-    FILTER NOT EXISTS{
-        ?x rdfs:subClassOf ?dt.
-    }
+    optional{
+        # the disease in this part of the person
+        ?dis_inst inheres: ?ppart .
+        ?dis_inst rdf:type ?dt .
+        ?dt rdfs:subClassOf diseasedisorderfinding: .
+        ?dt rdfs:label ?disease_type .
+        # want only the immediate diease type
+        FILTER NOT EXISTS{
+            ?dis_inst rdf:type ?x .
+            ?x rdfs:subClassOf ?dt
+            filter (?x != ?dt)
+        }
 
+        ?stage_inst rdf:type ?stage_class .
+        ?stage_inst about: ?dis_inst .
+        ?stage_class rdfs:subClassOf diseasestage: .
+        ?stage_class rdfs:label ?stagelabel .
+        FILTER NOT EXISTS{
+            ?stage_inst rdf:type ?x .
+            ?x rdfs:subClassOf ?stage_class .
+            filter (?x != ?stage_class)
+        }
+    }
 }"""
     ret = make_sparql_query(query)
     if collection is not None:
@@ -109,7 +139,7 @@ select ?collection ?patient_id ?disease_type ?location ?sexlabel ?age {
     if disease_type is not None:
         filter = []
         for row in ret:
-            if(row['disease_type'] == disease_type):
+            if(row.get('disease_type') == disease_type):
                 filter.append(row)
         ret = filter
     if location is not None:
