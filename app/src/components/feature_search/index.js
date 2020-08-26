@@ -56,7 +56,7 @@ export default class FeatureSearch extends Component {
 					color="primary"
 					onClick={this.sendRestriction}
 					disabled={this.state.value == null}>
-						Add Constraint
+						Add Restriction
 				</Button>
 			</div>
 		);
