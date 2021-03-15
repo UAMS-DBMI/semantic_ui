@@ -1,0 +1,175 @@
+.Beam-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  height: 12em;
+  padding-bottom: 3em;
+}
+
+.App-link {
+  text-decoration: none;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 3em;
+}
+
+.filter_div {
+}
+
+.filter_type {
+  font-size: 1.05em;
+  padding: 0.25em 1em;
+  border-top-left-radius: .25em;
+  border-top-right-radius: .25em;
+  background-color: pink;
+  color: black;
+}
+
+.filter_container {
+  display: flex;
+  margin-top: 0.25em;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.25em;
+  border: 1px solid pink;
+  box-shadow: pink 0px 0px 0.25em;
+  width: 100%;
+}
+
+.filter_spreader {
+  width: 100%;
+}
+
+.filter_search_box{
+  display: flex;
+}
+
+.filter_form {
+  display: flex;
+  flex: 1 1 0%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.filter_button {
+  width: 1em;
+  height: 1em;
+  fill: currentcolor;
+  font-size: 1.25em;
+}
+
+.explore_button {
+  border: 0px none;
+  margin: 0px 0px 0px 0.5em;
+  background: pink none repeat scroll 0% 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  font-size: 1.125em;
+  padding: 0px 0.5em;
+  border-radius: 0.22222em;
+}
+
+.filter_search_input {
+  top: 0;
+  left: 0;
+  border: 0;
+  box-shadow: none;
+  width: 100%;
+  font-size: 1em;
+  padding: .625em 2em .625em 1.125em;
+}
+
+.filter_results_container {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  font-size: .875em;
+  margin-top: .85em;
+  min-height: 6em;
+  list-style: none;
+  background-color: #fff;
+  color: #2e2b2b;
+  z-index: 999;
+  box-shadow: 0 10px 20px 5px rgba(0,0,0,.1);
+}
+
+.category_container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.category_box {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  border: 1px solid pink;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  margin-right: 0.5em;
+}
+
+tr.filter_row:hover {
+  background-color: lightpink;
+}
+
+.filter_containers {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.filter_item_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.tallButton {
+  margin: 3em;
+  padding: 1em;
+  height: 7em;
+  width: 7em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header_section {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  border-left: 0.15em solid #665b5d;
+  border-bottom: 0.15em solid #665b5d;
+  border-right: 0.15em solid #665b5d;
+  width: 100%;
+  background: #e6e0e1;
+  color: rgb(16, 50, 71);
+  height: 100%;
+}
+
+.header_title {
+
+}
+
+.cohort_name {
+  font-size: 2em;
+}
+
+.cohort_size_button {
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+.row_flex {
+  display: flex;
+  flex-direction: row;
+}

@@ -1,0 +1,150 @@
+[
+  {
+    "form_name": "basic",
+    "type": "text",
+    "name": "collection",
+    "label": "Collection Name"
+  },
+  {
+    "form_name": "basic",
+    "choices": [
+      {
+        "label": "Acinar Cell Carcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C3768"
+      },
+      {
+        "label": "Minimally Invasive Lung Mucinous Adenocarcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C7268"
+      },
+      {
+        "label": "Combined Lung Large Cell Neuroendocrine Carcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C7267"
+      },
+      {
+        "label": "Lung Large Cell Carcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C4450"
+      },
+      {
+        "label": "Invasive Lung Mucinous Adenocarcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C136709"
+      },
+      {
+        "label": "Solid Lung Adenocarcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C5651"
+      },
+      {
+        "label": "Lung Non-Keratinizing Squamous Cell Carcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C136714"
+      },
+      {
+        "label": "Lung Basaloid Squamous Cell  Carcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C45507"
+      },
+      {
+        "label": "Lepidic Predominant Adenocarcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C123160"
+      },
+      {
+        "label": "Lung Micropapillary Adenocarcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C128847"
+      },
+      {
+        "label": "Lung Enteric Adenocarcinoma",
+        "value": "http://purl.obolibrary.org/obo/NCIT_C136710"
+      }
+    ],
+    "type": "radio",
+    "name": "disease",
+    "label": "Disease"
+  },
+  {
+    "form_name": "basic",
+    "choices": [
+      {
+        "label": "middle lobe of right lung",
+        "value": "http://purl.obolibrary.org/obo/UBERON_0002174"
+      },
+      {
+        "label": "upper lobe of left lung",
+        "value": "http://purl.obolibrary.org/obo/UBERON_0008952"
+      },
+      {
+        "label": "lower lobe of right lung",
+        "value": "http://purl.obolibrary.org/obo/UBERON_0002171"
+      },
+      {
+        "label": "upper lobe of right lung",
+        "value": "http://purl.obolibrary.org/obo/UBERON_0002170"
+      },
+      {
+        "label": "lower lobe of left lung",
+        "value": "http://purl.obolibrary.org/obo/UBERON_0008953"
+      },
+      {
+        "label": "left lung hilus",
+        "value": "http://purl.obolibrary.org/obo/UBERON_0004887"
+      }
+    ],
+    "type": "radio",
+    "name": "location",
+    "label": "Disease Location"
+  },
+  {
+    "form_name": "basic",
+    "choices":[
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C27966",
+        "label": "Stage I"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C27975",
+        "label": "Stage IA"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C136485",
+        "label": "Stage IA3"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C27976",
+        "label": "Stage IB"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C28054",
+        "label": "Stage II"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C27967",
+        "label": "Stage IIA"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C27968",
+        "label": "Stage IIB"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C27978",
+        "label": "Stage IIIB"
+      },{
+        "value": "http://purl.obolibrary.org/obo/NCIT_C27971",
+        "label": "Stage IV"
+      }
+    ],
+    "type": "radio",
+    "name": "stage",
+    "label": "Disease Stage"
+  },
+  {
+    "form_name": "basic",
+    "choices": [
+      {
+        "value": "http://purl.obolibrary.org/obo/PATO_0000384",
+        "label": "Male"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/PATO_0000383",
+        "label": "Female"
+      }
+    ],
+    "type": "radio",
+    "name": "sex",
+    "label": "Sex"
+  },
+  {
+    "form_name": "basic",
+    "type": "calc",
+    "name": "age",
+    "label": "Age"
+  }
+]

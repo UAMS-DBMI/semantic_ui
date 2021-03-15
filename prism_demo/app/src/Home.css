@@ -1,0 +1,42 @@
+.Home {
+  color: #484848;
+  display: flex;
+}
+
+.textBlock {
+  width: 80%;
+  margin-right: 5%;
+}
+
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  margin-top: 1em;
+}
+
+.sideButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  background-color: white;
+  transition: background-color 0.3s ease, background-color 0.3s ease;
+}
+
+.sideButton:hover {
+  background-color: #f9f9f9;
+}
+
+.sideButton span {
+  color: #aa44c8;
+  font-size: 1.2em;
+  text-decoration: none;
+  font-family: serif;
+}
+
+.sideButton p {
+  color: #484848;
+  font-size: .8em;
+  text-align: center;
+}

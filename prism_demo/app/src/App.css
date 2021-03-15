@@ -1,0 +1,38 @@
+.header {
+  height: 10em;
+  background-image: url('./aries-bkgd-plain.jpg');
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.logo {
+  height: 6em;
+  flex-basis: 10%;
+}
+
+.header_side {
+  display: flex;
+  justify-content: space-evenly;
+  flex-basis: 45%;
+  flex-wrap: wrap;
+}
+
+.header_link {
+  text-decoration: none;
+  color: #ffffff !important;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  font-size: 1.1em;
+}
+
+.header_link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.main_container {
+  max-width: 1425px;
+  margin: 0 auto;
+  padding: 0px 90px;
+}

@@ -344,3 +344,224 @@ select distinct ?collection {
 }"""
     results = make_sparql_query(query)
     return [x['collection'] for x in results]
+
+@app.get("/age")
+def get_age_data(min: int = None, max: int = None):
+    """Retreive all patient ids for an age range."""
+    query = """PREFIX subject_id: <http://purl.org/PRISM_0000002>
+PREFIX age: <http://purl.obolibrary.org/obo/PATO_0000011>
+PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select distinct ?patient_id ?age {
+
+    # the subject identifier
+    ?id denotes: ?person .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # the person's age
+    ?ag inheres: ?person .
+    ?ag rdf:type age: .
+    ?ag rdfs:label ?age .
+}"""
+    results = make_sparql_query(query)
+    result_set = defaultdict(list)
+    for row in results:
+        if (min == None or int(row['age']) >= min) and (max == None or int(row['age']) <= max):
+            result_set[row['age']].append(row['patient_id'])
+    return result_set
+
+@app.get("/data/disease")
+def get_disease_data(uris: str = None):
+    valid_uris = uris.split(',')
+    formatted_uris = ["<{}>".format(x) for x in valid_uris]
+    filter_line = "filter(?dt in ({})) .".format(','.join(formatted_uris))
+    """Retreive all patient ids for disease types."""
+    query = """PREFIX subject_id: <http://purl.org/PRISM_0000002>
+PREFIX diseasedisorderfinding: <http://purl.obolibrary.org/obo/NCIT_C7057>
+PREFIX about: <http://purl.obolibrary.org/obo/IAO_0000136>
+PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
+PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
+PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select distinct ?patient_id ?dt {
+
+    # the subject identifier
+    ?id denotes: ?person .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    ?person has_part: ?ppart .
+    ?ppart rdf:type ?loctype .
+    ?loctype rdfs:label ?location .
+
+    # the disease in this part of the person
+    ?dis_inst inheres: ?ppart .
+    ?dis_inst rdf:type ?dt .
+    ?dt rdfs:subClassOf diseasedisorderfinding: .
+    ?dt rdfs:label ?disease_type .
+    %s
+}""" % (filter_line)
+    results = make_sparql_query(query)
+    result_set = defaultdict(list)
+    for row in results:
+        result_set[row['dt']].append(row['patient_id'])
+    return result_set
+
+@app.get("/data/sex")
+def get_sex_data(uris: str = None):
+    valid_uris = uris.split(',')
+    formatted_uris = ["<{}>".format(x) for x in valid_uris]
+    filter_line = "filter(?sexclass in ({})) .".format(','.join(formatted_uris))
+    """Retreive all patient ids for disease types."""
+    query = """PREFIX collection: <http://purl.org/PRISM_0000001>
+PREFIX subject_id: <http://purl.org/PRISM_0000002>
+PREFIX about: <http://purl.obolibrary.org/obo/IAO_0000136>
+PREFIX phensex: <http://purl.obolibrary.org/obo/PATO_0001894>
+PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
+PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
+PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select distinct ?patient_id ?sexclass{
+
+    # the subject identifier
+    ?id denotes: ?person .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # collection, collection name
+    ?c rdf:type collection: .
+    ?c rdfs:label ?collection .
+
+    # collections have subject ids as parts
+    ?c has_part: ?id .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # the person's sex
+    ?sex inheres: ?person .
+    ?sex rdf:type ?sexclass .
+    ?sexclass rdfs:subClassOf phensex: .
+    %s
+}""" % (filter_line)
+    results = make_sparql_query(query)
+    result_set = defaultdict(list)
+    for row in results:
+        result_set[row['sexclass']].append(row['patient_id'])
+    return result_set
+
+@app.get("/data/location")
+def get_location_data(uris: str = None):
+    valid_uris = uris.split(',')
+    formatted_uris = ["<{}>".format(x) for x in valid_uris]
+    filter_line = "filter(?loctype in ({})) .".format(','.join(formatted_uris))
+    """Retreive all patient ids for disease types."""
+    query = """PREFIX collection: <http://purl.org/PRISM_0000001>
+PREFIX subject_id: <http://purl.org/PRISM_0000002>
+PREFIX diseasedisorderfinding: <http://purl.obolibrary.org/obo/NCIT_C7057>
+PREFIX about: <http://purl.obolibrary.org/obo/IAO_0000136>
+PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
+PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
+PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select distinct ?patient_id ?loctype {
+
+    # the subject identifier
+    ?id denotes: ?person .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # collection, collection name
+    ?c rdf:type collection: .
+    ?c rdfs:label ?collection .
+
+    # collections have subject ids as parts
+    ?c has_part: ?id .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # parts of this person
+    ?person has_part: ?ppart .
+    ?ppart rdf:type ?loctype .
+    ?loctype rdfs:label ?location .
+    %s
+
+    # the disease in this part of the person
+    ?dis_inst inheres: ?ppart .
+    ?dis_inst rdf:type ?dt .
+    ?dt rdfs:subClassOf diseasedisorderfinding: .
+    ?dt rdfs:label ?disease_type .
+}""" % (filter_line)
+    results = make_sparql_query(query)
+    result_set = defaultdict(list)
+    for row in results:
+        result_set[row['loctype']].append(row['patient_id'])
+    return result_set
+
+@app.get("/data/stage")
+def get_stage_data(uris: str = None):
+    valid_uris = uris.split(',')
+    formatted_uris = ["<{}>".format(x) for x in valid_uris]
+    filter_line = "filter(?stage_class in ({})) .".format(','.join(formatted_uris))
+    """Retreive all patient ids for disease types."""
+    query = """PREFIX collection: <http://purl.org/PRISM_0000001>
+PREFIX subject_id: <http://purl.org/PRISM_0000002>
+PREFIX diseasestage: <http://purl.obolibrary.org/obo/NCIT_C28108>
+PREFIX diseasedisorderfinding: <http://purl.obolibrary.org/obo/NCIT_C7057>
+PREFIX about: <http://purl.obolibrary.org/obo/IAO_0000136>
+PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
+PREFIX human: <http://purl.obolibrary.org/obo/NCBITaxon_9606>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
+PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select distinct ?patient_id ?stage_class{
+
+    # the subject identifier
+    ?id denotes: ?person .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # collection, collection name
+    ?c rdf:type collection: .
+    ?c rdfs:label ?collection .
+
+    # collections have subject ids as parts
+    ?c has_part: ?id .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # parts of this person
+    ?person has_part: ?ppart .
+    ?ppart rdf:type ?loctype .
+    ?loctype rdfs:label ?location .
+
+    # the disease in this part of the person
+    ?dis_inst inheres: ?ppart .
+    ?dis_inst rdf:type ?dt .
+    ?dt rdfs:subClassOf diseasedisorderfinding: .
+    ?dt rdfs:label ?disease_type .
+
+    ?stage_inst rdf:type ?stage_class .
+    ?stage_inst about: ?dis_inst .
+    ?stage_class rdfs:subClassOf diseasestage: .
+    ?stage_class rdfs:label ?stagelabel .
+    %s
+}""" % (filter_line)
+    results = make_sparql_query(query)
+    result_set = defaultdict(list)
+    for row in results:
+        result_set[row['stage_class']].append(row['patient_id'])
+    return result_set

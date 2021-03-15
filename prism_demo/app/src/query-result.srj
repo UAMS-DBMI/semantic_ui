@@ -1,0 +1,28 @@
+[{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C27966"
+  "label": "Stage I"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C27975"
+  "label": "Stage IA"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C136485"
+  "label": "Stage IA3"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C27976"
+  "label": "Stage IB"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C28054"
+  "label": "Stage II"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C27967"
+  "label": "Stage IIA"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C27968"
+  "label": "Stage IIB"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C27978"
+  "label": "Stage IIIB"
+},{
+  "value": "http://purl.obolibrary.org/obo/NCIT_C27971"
+  "label": "Stage IV"
+}]

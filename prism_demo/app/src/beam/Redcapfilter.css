@@ -1,0 +1,23 @@
+.form_box {
+  padding: 1em;
+  margin-top: 0.75em;
+  border-left: 0.25em solid #665b5d;
+  border-top-right-radius: 0.25em;
+  border-bottom-right-radius: 0.25em;
+  width: 100%;
+  background: #e6e0e1;
+  vertical-align: middle;
+  user-select: none;
+  outline: currentcolor none medium;
+  color: rgb(16, 50, 71);
+}
+
+.boxes {
+  display: flex;
+  flex-direction: column;
+}
+
+.num_boxes {
+  display: flex;
+  justify-content: space-between;
+}
