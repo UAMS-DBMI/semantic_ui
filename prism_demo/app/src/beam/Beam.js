@@ -214,7 +214,7 @@ function Beam() {
   }
 
   async function fetch_all(currentCohort){
-    let url = process.env.REACT_APP_API_URL + 'data?';
+    let url = '/api/data?';
     let params = new URLSearchParams();
     params.set('patient_ids', currentCohort.join(','));
     const response = await fetch(url + params);
@@ -222,7 +222,7 @@ function Beam() {
     setAllData(data);
   }
 
-  let dUrl = process.env.REACT_APP_API_URL + 'data?';
+  let dUrl = '/api/data?';
   let dParams = new URLSearchParams();
   dParams.set('patient_ids', currentCohort.join(','));
   dParams.set('downloadFile', cohortName);

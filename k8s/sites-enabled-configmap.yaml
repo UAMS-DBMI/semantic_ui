@@ -24,18 +24,16 @@ data:
       root /usr/share/nginx/html;
 
       location / {
-        index index.html;
         # checks for static file, if not found proxy to app
-        try_files $uri @proxy_to_app;
+        try_files $uri $uri/ /index.html;
       }
 
-      location @proxy_to_app {
+      location /api/ {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $http_host;
 
-        proxy_redirect off;
-        proxy_pass http://app_server;
+        proxy_pass http://app_server/;
       }
 
       error_page 500 502 503 504 /500.html;

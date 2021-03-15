@@ -9,7 +9,7 @@ function NumberRangeFilter(props) {
 
   async function fetchData(){
     setFetching(true);
-    let url = process.env.REACT_APP_API_URL + 'age?';
+    let url = '/api/age?';
     let params = new URLSearchParams();
     if(greaterThan !== "") params.set('min', greaterThan);
     if(lessThan !== "") params.set('max', lessThan);

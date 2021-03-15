@@ -13,7 +13,7 @@ function RadioFilter(props) {
 
   async function fetchData(){
     setFetching(true);
-    let url = process.env.REACT_APP_API_URL + 'data/' + props.data.name + '?';
+    let url = '/api/data/' + props.data.name + '?';
     let params = new URLSearchParams();
     let uris = Object.keys(filters).filter((uri) =>
       filters[uri].enabled
