@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './Beam.css';
 import REDCAP from './prism_datadictionary.json';
 import RedcapFilter from './Redcapfilter';
+import DataTable from './DataTable';
 
 
 function TableRow(props){
@@ -121,6 +122,7 @@ function Beam() {
   const [cannotCohort, setCannotCohort] = useState({});
   const [currentCohort, setCurrentCohort] = useState([]);
   const [showCohort, setShowCohort] = useState(false);
+  const [allData, setAllData] = useState([]);
 
   function add_must_filter(name){
     let newFilters = mustFilters.slice();
@@ -180,7 +182,9 @@ function Beam() {
       cannotIntersection = cannotSets.reduce(intersect);
     }
     let finalCohort = new Set([...mustIntersection].filter(x => !cannotIntersection.has(x)));
-    setCurrentCohort(Array.from(finalCohort));
+    let finalCohortArr = Array.from(finalCohort);
+    setCurrentCohort(finalCohortArr);
+    fetch_all(finalCohortArr);
   }
 
   function add_must_cohort(name, patient_ids){
@@ -195,6 +199,15 @@ function Beam() {
     newCannotCohort[name] = patient_ids;
     setCannotCohort(newCannotCohort);
     update_current_cohort(mustCohort, newCannotCohort);
+  }
+
+  async function fetch_all(currentCohort){
+    let url = 'http://localhost:3000/data?';
+    let params = new URLSearchParams();
+    params.set('patient_ids', currentCohort.join(','));
+    const response = await fetch(url + params);
+    let data = await response.json();
+    setAllData(data);
   }
 
   const mustFilterBoxes = mustFilters.map(row =>
@@ -268,6 +281,8 @@ function Beam() {
       {
         (showCohort === true)
         ? <div className="currentCohort">
+            <DataTable data={allData} />
+            <h2>All Patient Ids</h2>
             <p style={{width: '80%', wordWrap: 'break-word'}}>{currentCohort.join(',')}</p>
           </div>
         : <></>
