@@ -2,9 +2,6 @@ import React, {useState} from 'react';
 import './Beam.css';
 import REDCAP from './prism_datadictionary.json';
 import RedcapFilter from './Redcapfilter';
-import {
-  Link
-} from "react-router-dom";
 
 
 function TableRow(props){
@@ -120,6 +117,10 @@ function FilterBox(props) {
 function Beam() {
   const [mustFilters, setMustFilters] = useState([]);
   const [cannotFilters, setCannotFilters] = useState([]);
+  const [mustCohort, setMustCohort] = useState({});
+  const [cannotCohort, setCannotCohort] = useState({});
+  const [currentCohort, setCurrentCohort] = useState([]);
+  const [showCohort, setShowCohort] = useState(false);
 
   function add_must_filter(name){
     let newFilters = mustFilters.slice();
@@ -127,10 +128,30 @@ function Beam() {
     setMustFilters(newFilters);
   }
 
+  function remove_must_filter(name){
+    let newFilters = mustFilters.slice();
+    newFilters.pop(name);
+    setMustFilters(newFilters);
+    let newCohort = {...mustCohort};
+    delete newCohort[name];
+    setMustCohort(newCohort);
+    update_current_cohort(newCohort, cannotCohort);
+  }
+
   function add_cannot_filter(name){
     let newFilters = cannotFilters.slice();
     newFilters.push(name);
     setCannotFilters(newFilters);
+  }
+
+  function remove_cannot_filter(name){
+    let newFilters = cannotFilters.slice();
+    newFilters.pop(name);
+    setCannotFilters(newFilters);
+    let newCohort = {...cannotCohort};
+    delete newCohort[name];
+    setCannotCohort(newCohort);
+    update_current_cohort(mustCohort, newCohort);
   }
 
   function get_data(name){
@@ -141,13 +162,52 @@ function Beam() {
     }
   }
 
+  function intersect(a, b) {
+      return new Set([...a].filter(i => b.has(i)));
+  }
+
+  function update_current_cohort(mustCohort, cannotCohort){
+    let mustSets = [];
+    Object.keys(mustCohort).map((cohort) => mustSets.push(new Set(mustCohort[cohort])));
+    var mustIntersection = new Set();
+    if(Object.keys(mustCohort).length > 0){
+      mustIntersection = mustSets.reduce(intersect);
+    }
+    let cannotSets = [];
+    Object.keys(cannotCohort).map((cohort) => cannotSets.push(new Set(cannotCohort[cohort])));
+    var cannotIntersection = new Set();
+    if(Object.keys(cannotCohort).length > 0){
+      cannotIntersection = cannotSets.reduce(intersect);
+    }
+    let finalCohort = new Set([...mustIntersection].filter(x => !cannotIntersection.has(x)));
+    setCurrentCohort(Array.from(finalCohort));
+  }
+
+  function add_must_cohort(name, patient_ids){
+    let newMustCohort = {...mustCohort};
+    newMustCohort[name] = patient_ids;
+    setMustCohort(newMustCohort);
+    update_current_cohort(newMustCohort, cannotCohort);
+  }
+
+  function add_cannot_cohort(name, patient_ids){
+    let newCannotCohort = {...cannotCohort};
+    newCannotCohort[name] = patient_ids;
+    setCannotCohort(newCannotCohort);
+    update_current_cohort(mustCohort, newCannotCohort);
+  }
+
   const mustFilterBoxes = mustFilters.map(row =>
-    <RedcapFilter data={get_data(row)} key={row}/>
+    <RedcapFilter data={get_data(row)} key={row} remove={remove_must_filter} fetch={add_must_cohort}/>
   );
 
   const cannotFilterBoxes = cannotFilters.map(row =>
-    <RedcapFilter data={get_data(row)} key={row}/>
+    <RedcapFilter data={get_data(row)} key={row} remove={remove_cannot_filter} fetch={add_cannot_cohort}/>
   );
+
+  let params = new URLSearchParams();
+  params.set('PatientCriteria', currentCohort.join(','));
+  const nbia_link = 'https://nbia.cancerimagingarchive.net/nbia-search/?' + params;
 
   return (
     <div>
@@ -170,8 +230,8 @@ function Beam() {
           <h2 className="header_title">Current Cohort</h2>
           <div className="row_flex">
             <div>
-              <h4>0 subjects</h4>
-              <button className="cohort_size_button">
+              <h4>{currentCohort.length} subjects</h4>
+              <button className="cohort_size_button" onClick={() => setShowCohort(!showCohort)}>
                 <svg version="1.1" viewBox="0 0 65 70" height="2em" with="2em">
                   <g>
                   	<g fill="#555753" opacity="0.3">
@@ -180,10 +240,10 @@ function Beam() {
                   	</g>
                   </g>
                 </svg>
-                <span>Count Subjects</span>
+                <span>Show Subjects</span>
               </button>
             </div>
-            <Link to="/facet" style={{textDecoration: 'none'}}>
+            <a href={nbia_link} style={{textDecoration: 'none'}} target='_'>
               <button className="tallButton">
                 <svg
                   fill="currentColor"
@@ -201,10 +261,17 @@ function Beam() {
                 </svg>
                 <span>Browse Files</span>
               </button>
-            </Link>
+            </a>
           </div>
         </div>
       </header>
+      {
+        (showCohort === true)
+        ? <div className="currentCohort">
+            <p style={{width: '80%', wordWrap: 'break-word'}}>{currentCohort.join(',')}</p>
+          </div>
+        : <></>
+      }
       <div className="filters">
         <div className="filter_item_container">
           <FilterBox must="MUST" data={REDCAP} added={add_must_filter}/>

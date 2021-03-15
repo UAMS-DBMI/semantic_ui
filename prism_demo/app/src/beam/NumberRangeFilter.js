@@ -14,8 +14,14 @@ function NumberRangeFilter(props) {
     if(greaterThan !== "") params.set('min', greaterThan);
     if(lessThan !== "") params.set('max', lessThan);
     const response = await fetch(url + params);
-    setData(await response.json())
+    let data = await response.json();
+    setData(data);
     setFetching(false);
+    var cohort = [];
+    for(var key in data){
+      cohort = cohort.concat(data[key]);
+    }
+    props.fetch(props.data.name, cohort);
   }
 
   let summary = <></>;
@@ -34,6 +40,7 @@ function NumberRangeFilter(props) {
 
   return (
     <div className="form_box">
+      <button onClick={() => props.remove(props.data.name)}>X</button>
       <h4>{props.data.name}</h4>
       <p>{props.data.label}</p>
       <div className="boxes">

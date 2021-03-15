@@ -23,15 +23,16 @@ function RedcapFilter(props) {
               </label>
             </div>
   } else if(props.data.type === 'calc'){
-    return <NumberRangeFilter data={props.data}/>
+    return <NumberRangeFilter data={props.data} remove={props.remove} fetch={props.fetch}/>
   } else if(['radio', 'checkbox', 'dropdown'].includes(props.data.type)){
-    return <RadioFilter data={props.data}/>
+    return <RadioFilter data={props.data} remove={props.remove} fetch={props.fetch}/>
   } else if(props.data.type === 'yesno') {
     let yesno = [{'value': 0, 'label': 'Yes'}, {'value': 1, 'label': 'No'}]
     input = check_boxes(yesno);
   }
   return (
     <div class="form_box">
+      <button onClick={() => props.remove(props.data.name)}>X</button>
       <h4>{props.data.name}</h4>
       <p>{props.data.label}</p>
       <div class="boxes">

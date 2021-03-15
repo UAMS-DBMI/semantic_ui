@@ -21,12 +21,17 @@ function RadioFilter(props) {
     params.set('uris', uris.join(','));
     const response = await fetch(url + params);
     setFetching(false);
-    setData(await response.json())
+    let data = await response.json();
+    setData(data);
+    var cohort = [];
+    for(var key in data){
+      cohort = cohort.concat(data[key]);
+    }
+    props.fetch(props.data.name, cohort);
   }
 
   function modifyFilter(choice, checked){
     let newFilters = {...filters};
-    console.log(choice)
     newFilters[choice].enabled = checked;
     setFilters(newFilters);
   }
@@ -61,6 +66,7 @@ function RadioFilter(props) {
 
   return (
     <div className="form_box">
+      <button onClick={() => props.remove(props.data.name)}>X</button>
       <h4>{props.data.name}</h4>
       <p>{props.data.label}</p>
       <div className="boxes">
