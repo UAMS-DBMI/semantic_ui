@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sui-demo
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: sui-demo
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: sui-demo
+spec:
+  selector:
+    matchLabels:
+      app: sui-demo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sui-demo
+    spec:
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: sui-sites-enabled-configmap
+      containers:
+      - image: tcia/prism-sui-demo:latest
+        name: sui-react
+        ports:
+        - containerPort: 80
+          name: sui-react
+        env:
+        - name: REACT_APP_API_URL
+          value: http://sui-demo-prism.apps.dbmi.cloud/
+        volumeMounts:
+          - name: nginx-conf
+            mountPath: /etc/nginx/conf.d/
+      - image: tcia/prism-sapi:latest
+        name: sui-sapi
+        ports:
+        - containerPort: 3000
+          name: sui-sapi
+        env:
+        - name: SEMAPI_TRIPLESTORE_URL
+          value: http://triplestore-prism.apps.dbmi.cloud/repositories/prism

@@ -6,6 +6,9 @@ from pydantic import BaseModel
 from typing import List
 import json
 import requests
+import os
+
+TRIPLESTORE_URL = os.getenv('SEMAPI_TRIPLESTORE_URL', 'http://localhost:7200/repositories/prism')
 
 class RDFClass(BaseModel):
     label: str
@@ -23,7 +26,7 @@ class SubjectClinicalData(BaseModel):
 def make_sparql_query(query, params={}):
     payload = {'query': query}
     headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/sparql-results+json'}
-    r = requests.post('http://localhost:7200/repositories/prism', data=payload, headers=headers)
+    r = requests.post(TRIPLESTORE_URL, data=payload, headers=headers)
     r.raise_for_status()
     ret = []
     results = r.json()
@@ -39,7 +42,7 @@ def make_sparql_query(query, params={}):
 def make_data_table_query(query, params={}):
     data = {'query': query}
     headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/sparql-results+json'}
-    r = requests.post('http://localhost:7200/repositories/prism', data=data, headers=headers)
+    r = requests.post(TRIPLESTORE_URL, data=data, headers=headers)
     r.raise_for_status()
     results = r.json()
     ret = {}
