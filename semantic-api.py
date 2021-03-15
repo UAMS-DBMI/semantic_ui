@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from collections import defaultdict
 from pydantic import BaseModel
 from typing import List
@@ -586,7 +586,7 @@ select distinct ?patient_id ?stage_class{
     return result_set
 
 @app.get("/data")
-def get_all_data(patient_ids: str = None):
+def get_all_data(patient_ids: str = None, downloadFile: str = None):
     ids = patient_ids.split(',')
     formatted_ids = ["'{}'".format(x) for x in ids]
     filter_line = "filter(?patient_id in ({})) .".format(','.join(formatted_ids))
@@ -677,4 +677,11 @@ select distinct ?collection ?patient_id ?sexlabel ?age ?location ?disease_type ?
     }
 }""" % (filter_line)
     results = make_data_table_query(query)
-    return results
+    if downloadFile is None:
+        return results
+    else:
+        bigstr = ','.join(results['columns']) + '\n'
+        for row in results['data']:
+            bigstr += ','.join(row) + '\n'
+        headers = {'Content-Disposition': 'attachment; filename={}.csv'.format(downloadFile)}
+        return Response(content=bigstr, headers=headers, media_type='text/csv')

@@ -123,6 +123,18 @@ function Beam() {
   const [currentCohort, setCurrentCohort] = useState([]);
   const [showCohort, setShowCohort] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [cohortName, setCohortName] = useState("Unnamed");
+
+  function reset_all(){
+    setMustFilters([]);
+    setCannotFilters([]);
+    setMustCohort({});
+    setCannotCohort({});
+    setCurrentCohort([]);
+    setShowCohort(false);
+    setAllData([]);
+    setCohortName("Unnamed");
+  }
 
   function add_must_filter(name){
     let newFilters = mustFilters.slice();
@@ -202,13 +214,19 @@ function Beam() {
   }
 
   async function fetch_all(currentCohort){
-    let url = 'http://localhost:3000/data?';
+    let url = process.env.REACT_APP_API_URL + 'data?';
     let params = new URLSearchParams();
     params.set('patient_ids', currentCohort.join(','));
     const response = await fetch(url + params);
     let data = await response.json();
     setAllData(data);
   }
+
+  let dUrl = process.env.REACT_APP_API_URL + 'data?';
+  let dParams = new URLSearchParams();
+  dParams.set('patient_ids', currentCohort.join(','));
+  dParams.set('downloadFile', cohortName);
+  const downloadLink = dUrl + dParams;
 
   const mustFilterBoxes = mustFilters.map(row =>
     <RedcapFilter data={get_data(row)} key={row} remove={remove_must_filter} fetch={add_must_cohort}/>
@@ -227,10 +245,10 @@ function Beam() {
       <header className="Beam-header">
         <div className="header_section">
           <h2 className="header_title">Current Cohort</h2>
-          <input className="cohort_name" placeholder="Unnamed"/>
+          <input className="cohort_name" value={cohortName} onChange={(e) => setCohortName(e.target.value)}/>
           <div className="flex_row">
-            <button>Save</button>
-            <button>New</button>
+            <button onClick={() => alert("Not yet implemented.")}>Save</button>
+            <button onClick={() => reset_all()}>New</button>
           </div>
         </div>
         <div className="header_section">
@@ -245,7 +263,7 @@ function Beam() {
             <div>
               <h4>{currentCohort.length} subjects</h4>
               <button className="cohort_size_button" onClick={() => setShowCohort(!showCohort)}>
-                <svg version="1.1" viewBox="0 0 65 70" height="2em" with="2em">
+                <svg version="1.1" viewBox="0 0 70 70" height="2em" with="2em">
                   <g>
                   	<g fill="#555753" opacity="0.3">
                   		<path d="m32.5 4.999c-5.405 0-10.444 1.577-14.699 4.282l-5.75-5.75v16.11h16.11l-6.395-6.395c3.18-1.787 6.834-2.82 10.734-2.82 12.171 0 22.073 9.902 22.073 22.074 0 2.899-0.577 5.664-1.599 8.202l4.738 2.762c1.47-3.363 2.288-7.068 2.288-10.964 0-15.164-12.337-27.501-27.5-27.501z"/>
@@ -255,6 +273,21 @@ function Beam() {
                 </svg>
                 <span>Show Subjects</span>
               </button>
+              <a href={downloadLink}>
+                <button className="cohort_size_button">
+                  <svg version="1.1" viewBox="0 0 20 20" height="2em" with="2em">
+                    <path
+                      fill="#555753" opacity="0.5"
+                      d="M.5 9.9a.5.5 0 01.5.5v2.5a1 1 0 001 1h12a1 1 0 001-1v-2.5a.5.5 0 011 0v2.5a2 2 0 01-2 2H2a2 2 0 01-2-2v-2.5a.5.5 0 01.5-.5z"
+                    />
+                    <path
+                      fill="#555753" opacity="0.5"
+                      d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8.5 10.293V1.5a.5.5 0 00-1 0v8.793L5.354 8.146a.5.5 0 10-.708.708l3 3z"
+                    />
+                  </svg>
+                  <span>Download CSV</span>
+                </button>
+              </a>
             </div>
             <a href={nbia_link} style={{textDecoration: 'none'}} target='_'>
               <button className="tallButton">
