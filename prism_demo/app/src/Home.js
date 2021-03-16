@@ -15,7 +15,7 @@ function Home() {
         <p>This is a demonstration of the semantic searching interface for cross-collection clinical feature cohort building.</p>
         <p>This interface will allow you to build a cohort of subjects across multiple collections based on clinical features that were reported to the TCIA.</p>
         <p>To use the tool, click "Explore Subject Cohort" on the right.</p>
-        <img className="demo-image" src={demo}/>
+        <img className="demo-image" src={demo} alt="Instuctions for the demo"/>
         <p>This demo is under active development, please report any bugs encounted to lead developer <a href="mailto:jrutecht@uams.edu">Joseph Utecht</a></p>
       </div>
       <div className="infoBlock">
@@ -25,11 +25,11 @@ function Home() {
           <span>Explore Subject Cohort</span>
           <p>Use the BEAM tool to build a search cohort across TCIA collections.</p>
         </Link>
-        <Link to="/" className="sideButton">
+        <a href="https://nbia.cancerimagingarchive.net/nbia-search/" className="sideButton">
           <img src={browse} className="svgIcon" alt="search"/>
           <span>Browse Files</span>
           <p>Go directly to the NBIA download tool.</p>
-        </Link>
+        </a>
       </div>
     </div>
   );
