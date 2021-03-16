@@ -40,7 +40,7 @@ function NumberRangeFilter(props) {
 
   return (
     <div className="form_box">
-      <button onClick={() => props.remove(props.data.name)}>X</button>
+      <button className="remove-button" onClick={() => props.remove(props.data.name)}>X</button>
       <h4>{props.data.name}</h4>
       <p>{props.data.label}</p>
       <div className="boxes">

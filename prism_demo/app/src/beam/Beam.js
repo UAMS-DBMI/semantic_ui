@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import './Beam.css';
 import REDCAP from './prism_datadictionary.json';
 import RedcapFilter from './Redcapfilter';
@@ -29,6 +29,19 @@ function FilterBox(props) {
     }
   }
 
+  const escFunction = useCallback((event) => {
+    if(event.keyCode === 27) clear_all()
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, [escFunction]);
+
+
   const categories = category_names.map(name =>
     <div key={name}
          style={{ backgroundColor: (filteredCategories.indexOf(name) >= 0 ? 'pink' : 'white') }}
@@ -50,6 +63,12 @@ function FilterBox(props) {
     setShowBox(false);
     setTextFilter("");
     props.added(name);
+  }
+
+  function clear_all(){
+      setTextFilter("");
+      setShowBox(false);
+      setCategoryFilter([]);
   }
 
   const filters = props.data.filter(row =>
@@ -89,6 +108,7 @@ function FilterBox(props) {
             </span>
           </div>
           <div className="filter_results_container" style={{display: (showBox ? 'block' : 'none')}}>
+            <button style={{float: 'right'}} onClick={() => clear_all()}>Close</button>
             <div className="category_container">
               {categories}
             </div>
@@ -143,8 +163,7 @@ function Beam() {
   }
 
   function remove_must_filter(name){
-    let newFilters = mustFilters.slice();
-    newFilters.pop(name);
+    let newFilters = mustFilters.filter((x) => x !== name);
     setMustFilters(newFilters);
     let newCohort = {...mustCohort};
     delete newCohort[name];
@@ -159,8 +178,7 @@ function Beam() {
   }
 
   function remove_cannot_filter(name){
-    let newFilters = cannotFilters.slice();
-    newFilters.pop(name);
+    let newFilters = cannotFilters.filter((x) => x !== name);
     setCannotFilters(newFilters);
     let newCohort = {...cannotCohort};
     delete newCohort[name];
@@ -187,16 +205,14 @@ function Beam() {
     if(Object.keys(mustCohort).length > 0){
       mustIntersection = mustSets.reduce(intersect);
     }
-    let cannotSets = [];
-    Object.keys(cannotCohort).map((cohort) => cannotSets.push(new Set(cannotCohort[cohort])));
-    var cannotIntersection = new Set();
-    if(Object.keys(cannotCohort).length > 0){
-      cannotIntersection = cannotSets.reduce(intersect);
+    var cannotArrays = [];
+    for(var key in cannotCohort){
+      cannotArrays = cannotArrays.concat(cannotCohort[key]);
     }
-    let finalCohort = new Set([...mustIntersection].filter(x => !cannotIntersection.has(x)));
-    let finalCohortArr = Array.from(finalCohort);
-    setCurrentCohort(finalCohortArr);
-    fetch_all(finalCohortArr);
+    let cannotUnion = new Set(cannotArrays);
+    let finalCohort = Array.from(mustIntersection).filter(x => !cannotUnion.has(x));
+    setCurrentCohort(finalCohort);
+    fetch_all(finalCohort);
   }
 
   function add_must_cohort(name, patient_ids){

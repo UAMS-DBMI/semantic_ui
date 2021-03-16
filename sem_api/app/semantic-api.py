@@ -54,7 +54,7 @@ def make_data_table_query(query, params={}):
             if var in row.keys():
                 new_row.append(row[var]['value'])
             else:
-                new_row.append(None)
+                new_row.append('')
         rows.append(new_row)
     ret['data'] = rows
     return ret
