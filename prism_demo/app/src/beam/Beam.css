@@ -3,8 +3,8 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-evenly;
-  height: 12em;
-  padding-bottom: 3em;
+  height: 14em;
+  padding-bottom: 1em;
 }
 
 .App-link {
@@ -144,7 +144,6 @@ tr.filter_row:hover {
 .header_section {
   display: flex;
   flex-direction: column;
-  padding: 1em;
   border-left: 0.15em solid #665b5d;
   border-bottom: 0.15em solid #665b5d;
   border-right: 0.15em solid #665b5d;
@@ -152,14 +151,16 @@ tr.filter_row:hover {
   background: #e6e0e1;
   color: rgb(16, 50, 71);
   height: 100%;
+  text-align: center;
+  flex-basis: content;
 }
 
 .header_title {
-
 }
 
 .cohort_name {
-  font-size: 2em;
+  width: 100%;
+  font-size: 1em;
 }
 
 .cohort_size_button {
@@ -168,9 +169,12 @@ tr.filter_row:hover {
   align-items: center;
   justify-content: space-between;
   padding: 1em;
+  width: 100%;
 }
 
 .row_flex {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }

@@ -259,52 +259,52 @@ function Beam() {
   return (
     <div>
       <header className="Beam-header">
-        <div className="header_section">
-          <h2 className="header_title">Current Cohort</h2>
-          <input className="cohort_name" value={cohortName} onChange={(e) => setCohortName(e.target.value)}/>
-          <div className="flex_row">
-            <button onClick={() => alert("This feature is not yet implemented.\n\nFor now please download the CSV or copy the list of Patient IDs.")}>Save</button>
-            <button onClick={() => reset_all()}>New</button>
-          </div>
-        </div>
-        <div className="header_section">
+        <div className="header_section" style={{flexGrow:1}}>
           <h2 className="collection_size header_title">Collection Size</h2>
           <span>1,082 subjects</span>
           <br/>
           <span>{REDCAP.length} data elements</span>
         </div>
-        <div className="header_section">
-          <h2 className="header_title">Current Cohort</h2>
+        <div className="header_section" style={{flexGrow:3}}>
+          <h2 className="header_title">Current Cohort - {currentCohort.length} subjects</h2>
           <div className="row_flex">
-            <div>
-              <h4>{currentCohort.length} subjects</h4>
-              <button className="cohort_size_button" onClick={() => setShowCohort(!showCohort)}>
-                <svg version="1.1" viewBox="0 0 70 70" height="2em" with="2em">
-                  <g>
-                  	<g fill="#555753" opacity="0.3">
-                  		<path d="m32.5 4.999c-5.405 0-10.444 1.577-14.699 4.282l-5.75-5.75v16.11h16.11l-6.395-6.395c3.18-1.787 6.834-2.82 10.734-2.82 12.171 0 22.073 9.902 22.073 22.074 0 2.899-0.577 5.664-1.599 8.202l4.738 2.762c1.47-3.363 2.288-7.068 2.288-10.964 0-15.164-12.337-27.501-27.5-27.501z"/>
-                  		<path d="m43.227 51.746c-3.179 1.786-6.826 2.827-10.726 2.827-12.171 0-22.073-9.902-22.073-22.073 0-2.739 0.524-5.35 1.439-7.771l-4.731-2.851c-1.375 3.271-2.136 6.858-2.136 10.622 0 15.164 12.336 27.5 27.5 27.5 5.406 0 10.434-1.584 14.691-4.289l5.758 5.759v-16.112h-16.111l6.389 6.388z"/>
-                  	</g>
-                  </g>
-                </svg>
-                <span>{showCohort ? "Hide" : "Show" } Subjects</span>
-              </button>
-              <a href={downloadLink}>
-                <button className="cohort_size_button">
-                  <svg version="1.1" viewBox="0 0 20 20" height="2em" with="2em">
-                    <path
-                      fill="#555753" opacity="0.5"
-                      d="M.5 9.9a.5.5 0 01.5.5v2.5a1 1 0 001 1h12a1 1 0 001-1v-2.5a.5.5 0 011 0v2.5a2 2 0 01-2 2H2a2 2 0 01-2-2v-2.5a.5.5 0 01.5-.5z"
-                    />
-                    <path
-                      fill="#555753" opacity="0.5"
-                      d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8.5 10.293V1.5a.5.5 0 00-1 0v8.793L5.354 8.146a.5.5 0 10-.708.708l3 3z"
-                    />
+            <div style={{overflow: 'hidden'}}>
+              <input className="cohort_name" value={cohortName} onChange={(e) => setCohortName(e.target.value)}/>
+              <div style={{display: 'flex'}}>
+                <button className="cohort_size_button" onClick={() => setShowCohort(!showCohort)}>
+                  <svg className="filter_button" viewBox="0 0 490 490">
+                    <path opacity="0.4" fill="none" stroke="#000" strokeWidth="36" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
                   </svg>
-                  <span>Download CSV</span>
+                  <span>{showCohort ? "Hide" : "Show" } Subjects</span>
                 </button>
-              </a>
+                <a style={{textDecoration: 'none', width: '100%'}} href={downloadLink}>
+                  <button className="cohort_size_button">
+                    <svg version="1.1" viewBox="0 0 20 20" height="2em" with="2em">
+                      <path
+                        fill="#555753" opacity="0.5"
+                        d="M.5 9.9a.5.5 0 01.5.5v2.5a1 1 0 001 1h12a1 1 0 001-1v-2.5a.5.5 0 011 0v2.5a2 2 0 01-2 2H2a2 2 0 01-2-2v-2.5a.5.5 0 01.5-.5z"
+                      />
+                      <path
+                        fill="#555753" opacity="0.5"
+                        d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8.5 10.293V1.5a.5.5 0 00-1 0v8.793L5.354 8.146a.5.5 0 10-.708.708l3 3z"
+                      />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </a>
+              </div>
             </div>
+            <button className="tallButton" onClick={() => reset_all()}>
+              <svg version="1.1" viewBox="0 0 70 70" height="3em" with="3em">
+                <g>
+                  <g fill="#555753">
+                    <path d="m32.5 4.999c-5.405 0-10.444 1.577-14.699 4.282l-5.75-5.75v16.11h16.11l-6.395-6.395c3.18-1.787 6.834-2.82 10.734-2.82 12.171 0 22.073 9.902 22.073 22.074 0 2.899-0.577 5.664-1.599 8.202l4.738 2.762c1.47-3.363 2.288-7.068 2.288-10.964 0-15.164-12.337-27.501-27.5-27.501z"/>
+                    <path d="m43.227 51.746c-3.179 1.786-6.826 2.827-10.726 2.827-12.171 0-22.073-9.902-22.073-22.073 0-2.739 0.524-5.35 1.439-7.771l-4.731-2.851c-1.375 3.271-2.136 6.858-2.136 10.622 0 15.164 12.336 27.5 27.5 27.5 5.406 0 10.434-1.584 14.691-4.289l5.758 5.759v-16.112h-16.111l6.389 6.388z"/>
+                  </g>
+                </g>
+              </svg>
+              <span>New</span>
+            </button>
             <a href={nbia_link} style={{textDecoration: 'none'}} target='_'>
               <button className="tallButton">
                 <svg
