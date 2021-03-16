@@ -398,6 +398,177 @@ select distinct ?patient_id ?age {
             result_set[row['age']].append(row['patient_id'])
     return result_set
 
+@app.get("/config")
+def get_config():
+    config = [
+      {
+        "type": "radio",
+        "name": "disease",
+        "choices": [
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C3768",
+            "label": "Acinar Cell Carcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C7267",
+            "label": "Combined Lung Large Cell Neuroendocrine Carcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C136709",
+            "label": "Invasive Lung Mucinous Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C4105",
+            "label": "Keratinizing Squamous Cell Carcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C123160",
+            "label": "Lepidic Predominant Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C3512",
+            "label": "Lung Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C45507",
+            "label": "Lung Basaloid Squamous Cell  Carcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C136710",
+            "label": "Lung Enteric Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C4450",
+            "label": "Lung Large Cell Carcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C128847",
+            "label": "Lung Micropapillary Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C136714",
+            "label": "Lung Non-Keratinizing Squamous Cell Carcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C2926",
+            "label": "Lung Non-Small Cell Carcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C2923",
+            "label": "Minimally Invasive Lung Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C7268",
+            "label": "Minimally Invasive Lung Mucinous Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C26712",
+            "label": "Mucinous Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C2853",
+            "label": "Papillary Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C5651",
+            "label": "Solid Lung Adenocarcinoma"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C2929",
+            "label": "Squamous Cell Carcinoma"
+          }
+        ],
+        "label": "The type of disease indicated in the clinical notes."
+      },
+      {
+        "choices": [
+          {
+            "label": "middle lobe of right lung",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0002174"
+          },
+          {
+            "label": "upper lobe of left lung",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0008952"
+          },
+          {
+            "label": "lower lobe of right lung",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0002171"
+          },
+          {
+            "label": "upper lobe of right lung",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0002170"
+          },
+          {
+            "label": "lower lobe of left lung",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0008953"
+          },
+          {
+            "label": "left lung hilus",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0004887"
+          }
+        ],
+        "type": "radio",
+        "name": "location",
+        "label": "The primary location of the disease."
+      },
+      {
+        "choices":[
+          {
+            "value": "http://purl.obolibrary.org/obo/NCIT_C27966",
+            "label": "Stage I"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C27975",
+            "label": "Stage IA"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C136485",
+            "label": "Stage IA3"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C27976",
+            "label": "Stage IB"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C28054",
+            "label": "Stage II"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C27967",
+            "label": "Stage IIA"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C27968",
+            "label": "Stage IIB"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C27978",
+            "label": "Stage IIIB"
+          },{
+            "value": "http://purl.obolibrary.org/obo/NCIT_C27971",
+            "label": "Stage IV"
+          }
+        ],
+        "type": "radio",
+        "name": "stage",
+        "label": "The extent of a cancer in the body. Staging is usually based on the size of the tumor, whether lymph nodes contain cancer, and whether the cancer has spread from the original site to other parts of the body."
+      },
+      {
+        "choices": [
+          {
+            "value": "http://purl.obolibrary.org/obo/PATO_0000384",
+            "label": "Male"
+          },
+          {
+            "value": "http://purl.obolibrary.org/obo/PATO_0000383",
+            "label": "Female"
+          }
+        ],
+        "type": "radio",
+        "name": "sex",
+        "label": "Sex"
+      },
+      {
+        "type": "calc",
+        "name": "age",
+        "label": "Age"
+      }
+    ]
+    return config
+
 @app.get("/data/disease")
 def get_disease_data(uris: str = None):
     valid_uris = uris.split(',')

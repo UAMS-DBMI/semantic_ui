@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import './Beam.css';
-import REDCAP from './prism_datadictionary.json';
 import RedcapFilter from './Redcapfilter';
 import DataTable from './DataTable';
+import { useFetch } from './useFetch';
 
 
 function TableRow(props){
@@ -43,7 +43,8 @@ function FilterBox(props) {
 
   const filters = props.data.filter(row =>
     textFilter.length === 0 ||
-    row.label.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0
+    row.label.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0 ||
+    row.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0
   ).map(row =>
     <TableRow data={row} key={row.name} added={added}/>
   );
@@ -106,6 +107,12 @@ function Beam() {
   const [allData, setAllData] = useState([]);
   const [cohortName, setCohortName] = useState("Unnamed");
 
+  const config = useFetch("/api/config");
+
+  if(config === null){
+    return <span>...</span>
+  }
+
   function reset_all(){
     setMustFilters([]);
     setCannotFilters([]);
@@ -148,7 +155,7 @@ function Beam() {
   }
 
   function get_data(name){
-    for(let row of REDCAP){
+    for(let row of config){
       if(row.name === name){
         return row
       }
@@ -224,7 +231,7 @@ function Beam() {
           <h2 className="collection_size header_title">Collection Size</h2>
           <span>1,082 subjects</span>
           <br/>
-          <span>{REDCAP.length} data elements</span>
+          <span>{config.length} data elements</span>
         </div>
         <div className="header_section" style={{flexGrow:3}}>
           <h2 className="header_title">Current Cohort - {currentCohort.length} subjects</h2>
@@ -299,11 +306,11 @@ function Beam() {
       }
       <div className="filters">
         <div className="filter_item_container">
-          <FilterBox must="MUST" data={REDCAP} added={add_must_filter}/>
+          <FilterBox must="MUST" data={config} added={add_must_filter}/>
           {mustFilterBoxes}
         </div>
         <div className="filter_item_container">
-          <FilterBox must="CANNOT" data={REDCAP} added={add_cannot_filter}/>
+          <FilterBox must="CANNOT" data={config} added={add_cannot_filter}/>
           {cannotFilterBoxes}
         </div>
       </div>

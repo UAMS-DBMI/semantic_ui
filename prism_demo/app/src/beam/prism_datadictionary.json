@@ -1,53 +1,81 @@
 [
   {
-    "choices": [
-      {
-        "label": "Acinar Cell Carcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C3768"
-      },
-      {
-        "label": "Minimally Invasive Lung Mucinous Adenocarcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C7268"
-      },
-      {
-        "label": "Combined Lung Large Cell Neuroendocrine Carcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C7267"
-      },
-      {
-        "label": "Lung Large Cell Carcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C4450"
-      },
-      {
-        "label": "Invasive Lung Mucinous Adenocarcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C136709"
-      },
-      {
-        "label": "Solid Lung Adenocarcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C5651"
-      },
-      {
-        "label": "Lung Non-Keratinizing Squamous Cell Carcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C136714"
-      },
-      {
-        "label": "Lung Basaloid Squamous Cell  Carcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C45507"
-      },
-      {
-        "label": "Lepidic Predominant Adenocarcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C123160"
-      },
-      {
-        "label": "Lung Micropapillary Adenocarcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C128847"
-      },
-      {
-        "label": "Lung Enteric Adenocarcinoma",
-        "value": "http://purl.obolibrary.org/obo/NCIT_C136710"
-      }
-    ],
     "type": "radio",
     "name": "disease",
+    "choices": [
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C3768",
+        "label": "Acinar Cell Carcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C7267",
+        "label": "Combined Lung Large Cell Neuroendocrine Carcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C136709",
+        "label": "Invasive Lung Mucinous Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C4105",
+        "label": "Keratinizing Squamous Cell Carcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C123160",
+        "label": "Lepidic Predominant Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C3512",
+        "label": "Lung Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C45507",
+        "label": "Lung Basaloid Squamous Cell  Carcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C136710",
+        "label": "Lung Enteric Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C4450",
+        "label": "Lung Large Cell Carcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C128847",
+        "label": "Lung Micropapillary Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C136714",
+        "label": "Lung Non-Keratinizing Squamous Cell Carcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C2926",
+        "label": "Lung Non-Small Cell Carcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C2923",
+        "label": "Minimally Invasive Lung Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C7268",
+        "label": "Minimally Invasive Lung Mucinous Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C26712",
+        "label": "Mucinous Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C2853",
+        "label": "Papillary Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C5651",
+        "label": "Solid Lung Adenocarcinoma"
+      },
+      {
+        "value": "http://purl.obolibrary.org/obo/NCIT_C2929",
+        "label": "Squamous Cell Carcinoma"
+      }
+    ],
     "label": "The type of disease indicated in the clinical notes."
   },
   {
@@ -114,7 +142,7 @@
     ],
     "type": "radio",
     "name": "stage",
-    "label": "The extent of a cancer in the body. Stage is usually based on the size of the tumor, whether lymph nodes contain cancer, and whether the cancer has spread from the original site to other parts of the body."
+    "label": "The extent of a cancer in the body. Staging is usually based on the size of the tumor, whether lymph nodes contain cancer, and whether the cancer has spread from the original site to other parts of the body."
   },
   {
     "choices": [
