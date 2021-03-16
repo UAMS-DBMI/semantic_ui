@@ -1,6 +1,5 @@
 [
   {
-    "form_name": "basic",
     "choices": [
       {
         "label": "Acinar Cell Carcinoma",
@@ -52,7 +51,6 @@
     "label": "The type of disease indicated in the clinical notes."
   },
   {
-    "form_name": "basic",
     "choices": [
       {
         "label": "middle lobe of right lung",
@@ -84,7 +82,6 @@
     "label": "The primary location of the disease."
   },
   {
-    "form_name": "basic",
     "choices":[
       {
         "value": "http://purl.obolibrary.org/obo/NCIT_C27966",
@@ -120,7 +117,6 @@
     "label": "The extent of a cancer in the body. Stage is usually based on the size of the tumor, whether lymph nodes contain cancer, and whether the cancer has spread from the original site to other parts of the body."
   },
   {
-    "form_name": "basic",
     "choices": [
       {
         "value": "http://purl.obolibrary.org/obo/PATO_0000384",
@@ -136,7 +132,6 @@
     "label": "Sex"
   },
   {
-    "form_name": "basic",
     "type": "calc",
     "name": "age",
     "label": "Age"

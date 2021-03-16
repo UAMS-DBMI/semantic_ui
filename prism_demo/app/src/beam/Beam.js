@@ -9,10 +9,7 @@ function TableRow(props){
   return (
     <tr className="filter_row" onClick={() => props.added(props.data.name)}>
       <td>{props.data.name}</td>
-      <td>{props.data.type}</td>
-      <td>{props.data.form_name}</td>
       <td>{props.data.label}</td>
-      <td>0</td>
     </tr>
   )
 }
@@ -20,14 +17,6 @@ function TableRow(props){
 function FilterBox(props) {
   const [showBox, setShowBox] = useState(false);
   const [textFilter, setTextFilter] = useState("");
-  const [filteredCategories, setCategoryFilter] = useState([]);
-
-  let category_names = [];
-  for(let row of props.data){
-    if(category_names.indexOf(row.form_name) === -1){
-      category_names.push(row.form_name);
-    }
-  }
 
   const escFunction = useCallback((event) => {
     if(event.keyCode === 27) clear_all()
@@ -41,24 +30,6 @@ function FilterBox(props) {
     };
   }, [escFunction]);
 
-
-  const categories = category_names.map(name =>
-    <div key={name}
-         style={{ backgroundColor: (filteredCategories.indexOf(name) >= 0 ? 'pink' : 'white') }}
-         onClick={() => {
-          let newFilter = filteredCategories.slice();
-          if(newFilter.indexOf(name) >= 0){
-            newFilter.pop(name);
-          } else {
-            newFilter.push(name);
-          }
-          setCategoryFilter(newFilter);
-         }}
-         className="category_box">
-      <span className="category_name">{name}</span>
-    </div>
-  );
-
   function added(name){
     setShowBox(false);
     setTextFilter("");
@@ -68,13 +39,9 @@ function FilterBox(props) {
   function clear_all(){
       setTextFilter("");
       setShowBox(false);
-      setCategoryFilter([]);
   }
 
   const filters = props.data.filter(row =>
-    filteredCategories.length === 0 ||
-    filteredCategories.indexOf(row.form_name) >= 0
-  ).filter(row =>
     textFilter.length === 0 ||
     row.label.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0
   ).map(row =>
@@ -109,18 +76,12 @@ function FilterBox(props) {
           </div>
           <div className="filter_results_container" style={{display: (showBox ? 'block' : 'none')}}>
             <button style={{float: 'right'}} onClick={() => clear_all()}>Close</button>
-            <div className="category_container">
-              {categories}
-            </div>
             <div className="filter_list">
               <table className="filter_table">
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Data Type</th>
-                    <th>Form Category</th>
                     <th>Description</th>
-                    <th>Count</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -86,8 +86,6 @@
 }
 
 .filter_results_container {
-  position: absolute;
-  left: 0;
   width: 100%;
   font-size: .875em;
   margin-top: .85em;
