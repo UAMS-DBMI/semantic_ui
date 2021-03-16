@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 import search from './search.svg';
 import browse from './browse.svg';
+import demo from './demo.png';
 
 function Home() {
   return (
@@ -12,6 +13,10 @@ function Home() {
         <h3>Semantic Search Demo</h3>
         <h4>Joseph Utecht</h4>
         <p>This is a demonstration of the semantic searching interface for cross-collection clinical feature cohort building.</p>
+        <p>This interface will allow you to build a cohort of subjects across multiple collections based on clinical features that were reported to the TCIA.</p>
+        <p>To use the tool, click "Explore Subject Cohort" on the right.</p>
+        <img className="demo-image" src={demo}/>
+        <p>This demo is under active development, please report any bugs encounted to lead developer <a href="mailto:jrutecht@uams.edu">Joseph Utecht</a></p>
       </div>
       <div className="infoBlock">
         <h2>Explore Collection</h2>
