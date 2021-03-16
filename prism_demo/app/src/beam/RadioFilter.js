@@ -10,9 +10,11 @@ function RadioFilter(props) {
   const [filters, setFilters] = useState(startingFilters);
   const [data, setData] = useState(null);
   const [fetching, setFetching] = useState(null);
+  const [disableButton, setDisableButton] = useState(true);
 
   async function fetchData(){
     setFetching(true);
+    setDisableButton(true);
     let url = '/api/data/' + props.data.name + '?';
     let params = new URLSearchParams();
     let uris = Object.keys(filters).filter((uri) =>
@@ -33,6 +35,12 @@ function RadioFilter(props) {
   function modifyFilter(choice, checked){
     let newFilters = {...filters};
     newFilters[choice].enabled = checked;
+    setDisableButton(true);
+    for(var key in newFilters){
+      if(newFilters[key].enabled){
+        setDisableButton(false);
+      }
+    }
     setFilters(newFilters);
   }
 
@@ -66,13 +74,14 @@ function RadioFilter(props) {
 
   return (
     <div className="form_box">
-      <button onClick={() => props.remove(props.data.name)}>X</button>
+      <button className="remove-button" onClick={() => props.remove(props.data.name)}>X</button>
       <h4>{props.data.name}</h4>
       <p>{props.data.label}</p>
       <div className="boxes">
         {input}
       </div>
-      <button onClick={fetchData} disabled={fetching}>Fetch Data</button>
+      <button onClick={fetchData} disabled={disableButton}>Fetch Data</button>
+      {fetching === true ? <span>...</span> : <></>}
       <div>{summary}</div>
     </div>
   );

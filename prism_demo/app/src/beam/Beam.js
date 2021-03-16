@@ -247,7 +247,7 @@ function Beam() {
           <h2 className="header_title">Current Cohort</h2>
           <input className="cohort_name" value={cohortName} onChange={(e) => setCohortName(e.target.value)}/>
           <div className="flex_row">
-            <button onClick={() => alert("Not yet implemented.")}>Save</button>
+            <button onClick={() => alert("This feature is not yet implemented.\n\nFor now please download the CSV or copy the list of Patient IDs.")}>Save</button>
             <button onClick={() => reset_all()}>New</button>
           </div>
         </div>
@@ -271,7 +271,7 @@ function Beam() {
                   	</g>
                   </g>
                 </svg>
-                <span>Show Subjects</span>
+                <span>{showCohort ? "Hide" : "Show" } Subjects</span>
               </button>
               <a href={downloadLink}>
                 <button className="cohort_size_button">

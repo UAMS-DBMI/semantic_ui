@@ -1,8 +1,5 @@
 import React from 'react';
-
-function object_to_array(row){
-  return Object.keys(row).map((key) => row[key]);
-}
+import './DataTable.css';
 
 function DataTable(props) {
   if (!props.data.hasOwnProperty("columns")){
@@ -16,7 +13,7 @@ function DataTable(props) {
       {row.map((value, i) => <td key={'r' + ri + 'i' + i}>{value}</td>)}
     </tr>);
   return (
-    <table>
+    <table className="data-table">
       <thead>
         <tr>{headers}</tr>
       </thead>
