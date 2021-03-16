@@ -3,4 +3,5 @@
 To run this locally
 
 `npm install`
-`npm install`
+
+`npm start`
