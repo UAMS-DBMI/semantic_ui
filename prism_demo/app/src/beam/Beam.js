@@ -5,11 +5,20 @@ import DataTable from './DataTable';
 import { useFetch } from './useFetch';
 
 
-function TableRow(props){
+function CategoryTableRow(props){
   return (
-    <tr className="filter_row" onClick={() => props.added(props.data.name)}>
+    <tr className="filter_row" onClick={() => props.added(props.data.name, null)}>
       <td>{props.data.name}</td>
       <td>{props.data.label}</td>
+    </tr>
+  )
+}
+
+function TermTableRow(props){
+  return (
+    <tr className="filter_row" onClick={() => props.added(props.category, props.value)}>
+      <td>{props.category}</td>
+      <td>{props.label}</td>
     </tr>
   )
 }
@@ -19,7 +28,8 @@ function FilterBox(props) {
   const [textFilter, setTextFilter] = useState("");
 
   const escFunction = useCallback((event) => {
-    if(event.keyCode === 27) clear_all()
+    if(event.keyCode === 27) clear_all();
+//    if(event.keyCode === 13) try_enter();
   }, []);
 
   useEffect(() => {
@@ -30,10 +40,10 @@ function FilterBox(props) {
     };
   }, [escFunction]);
 
-  function added(name){
+  function added(category, uri){
     setShowBox(false);
     setTextFilter("");
-    props.added(name);
+    props.added(category, uri);
   }
 
   function clear_all(){
@@ -41,13 +51,32 @@ function FilterBox(props) {
       setShowBox(false);
   }
 
-  const filters = props.data.filter(row =>
-    textFilter.length === 0 ||
-    row.label.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0 ||
-    row.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0
-  ).map(row =>
-    <TableRow data={row} key={row.name} added={added}/>
+  const category_filters = props.data.map(row =>
+    <CategoryTableRow data={row} key={row.name} added={added}/>
   );
+
+  var filtersArr = [];
+  for(var category of props.data){
+    if('choices' in category){
+      for(var choice of category.choices){
+        if(choice.label.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0){
+          filtersArr.push({'category': category.name, 'label': choice.label, 'value': choice.value});
+        }
+      }
+    }
+    if(category.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0){
+      filtersArr.push({'category': category.name, 'label': category.name, 'value': ''});
+    }
+  }
+  const filters = filtersArr.map((row, i) =>
+    <TermTableRow category={row.category} label={row.label} uri={row.value} key={i} added={added}/>
+  );
+
+  /*function try_enter(){
+    if(filtersArr.length === 1){
+      added(filtersArr[0].category, filtersArr[0].value);
+    }
+  }*/
 
   return (
     <div className="filter_div">
@@ -61,7 +90,6 @@ function FilterBox(props) {
                      value={textFilter}
                      onChange={(e) => {
                        setTextFilter(e.target.value);
-                       setShowBox(true);
                      }}
                      placeholder="Search Term..."/>
               <svg className="filter_button" viewBox="0 0 490 490">
@@ -83,6 +111,22 @@ function FilterBox(props) {
                   <tr>
                     <th>Name</th>
                     <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {category_filters}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="filter_results_container" style={{display: (textFilter !== "" ? 'block' : 'none')}}>
+            <button style={{float: 'right'}} onClick={() => clear_all()}>Close</button>
+            <div className="filter_list">
+              <table className="filter_table">
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Term</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,9 +168,10 @@ function Beam() {
     setCohortName("Unnamed");
   }
 
-  function add_must_filter(name){
+  function add_must_filter(category, uri){
+    if(mustFilters.indexOf(category) >= 0) return;
     let newFilters = mustFilters.slice();
-    newFilters.push(name);
+    newFilters.push(category);
     setMustFilters(newFilters);
   }
 
@@ -139,9 +184,10 @@ function Beam() {
     update_current_cohort(newCohort, cannotCohort);
   }
 
-  function add_cannot_filter(name){
+  function add_cannot_filter(category, uri){
+    if(cannotFilters.indexOf(category) >= 0) return;
     let newFilters = cannotFilters.slice();
-    newFilters.push(name);
+    newFilters.push(category);
     setCannotFilters(newFilters);
   }
 

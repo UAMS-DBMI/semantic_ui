@@ -142,7 +142,9 @@ select distinct ?collection ?patient_id ?sexlabel ?age ?location ?disease_type ?
             ?x rdfs:subClassOf ?dt
             filter (?x != ?dt)
         }
+    }
 
+    optional{
         ?stage_inst rdf:type ?stage_class .
         ?stage_inst about: ?dis_inst .
         ?stage_class rdfs:subClassOf diseasestage: .
@@ -840,7 +842,9 @@ select distinct ?collection ?patient_id ?sexlabel ?age ?location ?disease_type ?
             ?x rdfs:subClassOf ?dt
             filter (?x != ?dt)
         }
+    }
 
+    optional{
         ?stage_inst rdf:type ?stage_class .
         ?stage_inst about: ?dis_inst .
         ?stage_class rdfs:subClassOf diseasestage: .
