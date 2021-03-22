@@ -7,7 +7,7 @@ from typing import List
 import json
 import requests
 import os
-import app.queries as queries
+import queries as queries
 
 TRIPLESTORE_URL = os.getenv('SEMAPI_TRIPLESTORE_URL', 'http://localhost:7200/repositories/prism')
 

@@ -134,11 +134,9 @@ def ids_from_location_uris(location_uris):
     filter_line = f"filter(?loctype in ({long_string})) ."
     query = f"""{PREFIX}
     select distinct ?patient_id ?loctype {{
-
         {PATIENT}
         {LOCATION}
         {filter_line}
-
         {DISEASE}
     }}"""
     return query
@@ -161,9 +159,9 @@ def ids_from_disease_uris(disease_uris):
     filter_line = f"filter(?dt in ({long_string})) ."
     query = f"""{PREFIX}
     select distinct ?patient_id ?dt {{
-    {PATIENT}
-    {DISEASE}
-    {LOCATION}
-    {filter_line}
+        {PATIENT}
+        {DISEASE}
+        {LOCATION}
+        {filter_line}
     }}"""
     return query
