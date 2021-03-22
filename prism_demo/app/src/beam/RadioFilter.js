@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './Redcapfilter.css';
+import './mybarchart.css';
 
 
 function RadioFilter(props) {
@@ -46,7 +47,7 @@ function RadioFilter(props) {
 
   function check_boxes(choices){
     return Object.keys(choices).map((choice) =>
-      <label key={choice}>
+      <label key={choice} title={choice}>
         <input type='checkbox'
                onClick={(e) => modifyFilter(choice, e.target.checked)}
                readOnly checked={choices[choice].enabled}
@@ -56,21 +57,45 @@ function RadioFilter(props) {
     );
   }
 
-  let summary = <></>;
-  if(data !== null){
-    let patient_count = 0;
-    let distinct_count = 0;
-    for(var key in data){
-      distinct_count += 1;
-      patient_count += data[key].length;
-    }
-    summary = <div>
-      <p>Distinct Values: {distinct_count}</p>
-      <p>Total Patients: {patient_count}</p>
-    </div>
+  function bar_boxes(choices, max){
+    return Object.keys(choices).map((choice) =>
+    <tr>
+      <label key={choice} title={choice}>
+        <input type='checkbox'
+               onClick={(e) => modifyFilter(choice, e.target.checked)}
+               readOnly checked={choices[choice].enabled}
+               value={choice}/>
+        {choices[choice].label}
+      </label>
+      {choice in data ?
+      <td style={{'--size': 'calc(' + data[choice].length + '/' + max + ')'}}>
+        {data[choice].length}
+      </td>
+      : <></>
+      }
+    </tr>
+    );
   }
 
   let input = check_boxes(filters);
+
+  let total_count = '';
+  if(data !== null){
+    let patient_count = 0;
+    let max = 0;
+    for(var key in data){
+      let count = data[key].length;
+      patient_count += count;
+      if(count > max) max = count;
+    }
+    total_count = patient_count + ' total subjects';
+    input = (<table className="my-charts-css bar reverse">
+          <tbody>
+            {bar_boxes(filters, max)}
+          </tbody>
+        </table>);
+  }
+
 
   return (
     <div className="form_box">
@@ -80,9 +105,11 @@ function RadioFilter(props) {
       <div className="boxes">
         {input}
       </div>
-      <button onClick={fetchData} disabled={disableButton}>Fetch Data</button>
-      {fetching === true ? <span>...</span> : <></>}
-      <div>{summary}</div>
+      <div className="fetch-button">
+        <button onClick={fetchData} disabled={disableButton}>Fetch Data</button>
+        {fetching === true ? <span>...</span> : <></>}
+        <span>{total_count}</span>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,137 @@
+.chart-labels {
+  display: flex;
+}
+
+.my-charts-css {
+    --color-1: rgba(240,50,50,0.75);
+    --color-2: rgba(255,180,50,0.75);
+    --color-3: rgba(255,220,90,0.75);
+    --color-4: rgba(100,210,80,0.75);
+    --color-5: rgba(90,165,255,0.75);
+    --color-6: rgba(170,90,240,0.75);
+    --color-7: hsla(0,0%,70.6%,0.75);
+    --color-8: hsla(0,0%,43.1%,0.75);
+    --color-9: rgba(170,150,110,0.75);
+    --color-10: rgba(130,50,20,0.75);
+}
+
+table.my-charts-css {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.my-charts-css tbody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+}
+
+.my-charts-css tr {
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  /*overflow-wrap: anywhere;*/
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.my-charts-css td {
+  justify-content: flex-end;
+  text-align: end;
+  width: calc(50% * var(--size, 1));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 1) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 1),
+.my-charts-css.column tbody tr:nth-of-type(10n + 1) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 1),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 1)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 1)::before {
+  background: var(--color, var(--color-1));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 2) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 2),
+.my-charts-css.column tbody tr:nth-of-type(10n + 2) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 2),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 2)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 2)::before {
+  background: var(--color, var(--color-2));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 3) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 3),
+.my-charts-css.column tbody tr:nth-of-type(10n + 3) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 3),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 3)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 3)::before {
+  background: var(--color, var(--color-3));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 4) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 4),
+.my-charts-css.column tbody tr:nth-of-type(10n + 4) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 4),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 4)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 4)::before {
+  background: var(--color, var(--color-4));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 5) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 5),
+.my-charts-css.column tbody tr:nth-of-type(10n + 5) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 5),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 5)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 5)::before {
+  background: var(--color, var(--color-5));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 6) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 6),
+.my-charts-css.column tbody tr:nth-of-type(10n + 6) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 6),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 6)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 6)::before {
+  background: var(--color, var(--color-6));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 7) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 7),
+.my-charts-css.column tbody tr:nth-of-type(10n + 7) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 7),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 7)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 7)::before {
+  background: var(--color, var(--color-7));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 8) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 8),
+.my-charts-css.column tbody tr:nth-of-type(10n + 8) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 8),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 8)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 8)::before {
+  background: var(--color, var(--color-8));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 9) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 9),
+.my-charts-css.column tbody tr:nth-of-type(10n + 9) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 9),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 9)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 9)::before {
+  background: var(--color, var(--color-9));
+}
+
+.my-charts-css.bar tbody tr:nth-of-type(10n + 10) td,
+.my-charts-css.bar.multiple tbody tr td:nth-of-type(10n + 10),
+.my-charts-css.column tbody tr:nth-of-type(10n + 10) td,
+.my-charts-css.column.multiple tbody tr td:nth-of-type(10n + 10),
+.my-charts-css.area tbody tr td:nth-of-type(10n + 10)::before,
+.my-charts-css.line tbody tr td:nth-of-type(10n + 10)::before {
+  background: var(--color, var(--color-10));
+}

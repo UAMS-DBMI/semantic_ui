@@ -25,3 +25,9 @@
 .remove-button {
   float: right;
 }
+
+.fetch-button {
+  display: flex;
+  justify-content: space-around;
+  margin: 1em;
+}

@@ -4,7 +4,6 @@ import RedcapFilter from './Redcapfilter';
 import DataTable from './DataTable';
 import { useFetch } from './useFetch';
 
-
 function CategoryTableRow(props){
   return (
     <tr className="filter_row" onClick={() => props.added(props.data.name, null)}>

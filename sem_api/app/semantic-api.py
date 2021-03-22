@@ -485,8 +485,17 @@ def get_config():
       {
         "choices": [
           {
+            "label": "right lung lobe",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0006518"
+          },
+          {
+            "label": "left lung lobe",
+            "value": "http://purl.obolibrary.org/obo/UBERON_0008951"
+          },
+          {
             "label": "middle lobe of right lung",
-            "value": "http://purl.obolibrary.org/obo/UBERON_0002174"
+            "value": "http://purl.obolibrary.org/obo/UBERON_0002174",
+            "indention": 1
           },
           {
             "label": "upper lobe of left lung",

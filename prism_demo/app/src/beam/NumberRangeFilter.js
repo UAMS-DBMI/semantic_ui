@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import './Redcapfilter.css';
+import BarChart from './BarChart';
 
 function NumberRangeFilter(props) {
   const [greaterThan, setGreaterThan] = useState("");
   const [lessThan, setLessThan] = useState("");
   const [data, setData] = useState(null);
   const [fetching, setFetching] = useState(null);
+  const [disableButton, setDisableButton] = useState(false);
 
   async function fetchData(){
+    setDisableButton(true);
     setFetching(true);
     let url = '/api/age?';
     let params = new URLSearchParams();
@@ -25,16 +28,15 @@ function NumberRangeFilter(props) {
   }
 
   let summary = <></>;
+  let total_count = '';
   if(data !== null){
     let patient_count = 0;
-    let distinct_count = 0;
     for(var age in data){
-      distinct_count += 1;
       patient_count += data[age].length;
     }
+    total_count = patient_count + ' total subjects';
     summary = <div>
-      <p>Distinct Values: {distinct_count}</p>
-      <p>Total Patients: {patient_count}</p>
+      <BarChart data={data}/>
     </div>
   }
 
@@ -49,6 +51,7 @@ function NumberRangeFilter(props) {
           <input type='number'
              value={greaterThan}
              onChange={(e) => {
+               setDisableButton(false);
                setGreaterThan(e.target.value);
              }}
              placeholder="Greater than..."/>
@@ -58,12 +61,17 @@ function NumberRangeFilter(props) {
           <input type='number'
              value={lessThan}
              onChange={(e) => {
+               setDisableButton(false);
                setLessThan(e.target.value);
              }}
              placeholder="Less than..."/>
          </div>
       </div>
-      <button onClick={fetchData} disabled={fetching}>Fetch Data</button>
+      <div className="fetch-button">
+        <button onClick={fetchData} disabled={disableButton}>Fetch Data</button>
+        {fetching === true ? <span>...</span> : <></>}
+        <span>{total_count}</span>
+      </div>
       <div>{summary}</div>
     </div>
   );
