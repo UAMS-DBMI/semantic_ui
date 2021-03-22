@@ -292,3 +292,30 @@ def post_all_data(patient_ids: PIDS):
     query = queries.all_from_patient_ids(patient_ids.patient_ids)
     results = make_data_table_query(query)
     return results
+
+@app.get("/age")
+def get_age_data(min: int = None, max: int = None):
+    """Retreive all patient ids for an age range."""
+    query = """PREFIX subject_id: <http://purl.org/PRISM_0000002>
+PREFIX age: <http://purl.obolibrary.org/obo/PATO_0000011>
+PREFIX inheres: <http://purl.obolibrary.org/obo/RO_0000052>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select distinct ?patient_id ?age {
+    # the subject identifier
+    ?id denotes: ?person .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+    # the person's age
+    ?ag inheres: ?person .
+    ?ag rdf:type age: .
+    ?ag rdfs:label ?age .
+}"""
+    results = make_sparql_query(query)
+    result_set = defaultdict(list)
+    for row in results:
+        if (min == None or int(row['age']) >= min) and (max == None or int(row['age']) <= max):
+            result_set[row['age']].append(row['patient_id'])
+    return result_set
