@@ -124,7 +124,6 @@ def ids_from_stage_uris(stage_uris):
         {STAGE}
         {filter_line}
     }}"""
-    print(query)
     return query
 
 
@@ -186,21 +185,16 @@ if __name__ == '__main__':
     triplestore_url = 'http://localhost:7200/repositories/prism'
     patient_ids = ['C3L-02219', 'C3N-02451']
     query = all_from_patient_ids(patient_ids)
-    print(query)
-    print(_make_sparql_query(query, triplestore_url))
+    print(f"all {len(_make_sparql_query(query, triplestore_url))}")
     disease_uris = ['http://purl.obolibrary.org/obo/NCIT_C136709', 'http://purl.obolibrary.org/obo/NCIT_C4105']
     query = ids_from_disease_uris(disease_uris)
-    print(query)
-    print(_make_sparql_query(query, triplestore_url))
+    print(f"disease {len(_make_sparql_query(query, triplestore_url))}")
     location_uris = ['http://purl.obolibrary.org/obo/UBERON_0006518']
     query = ids_from_location_uris(location_uris)
-    print(query)
-    print(_make_sparql_query(query, triplestore_url))
+    print(f"location {len(_make_sparql_query(query, triplestore_url))}")
     sex_uris = ['http://purl.obolibrary.org/obo/PATO_0000384']
     query = ids_from_sex_uris(sex_uris)
-    print(query)
-    print(_make_sparql_query(query, triplestore_url))
+    print(f"sex {len(_make_sparql_query(query, triplestore_url))}")
     stage_uris = ['http://purl.obolibrary.org/obo/NCIT_C28054']
     query = ids_from_stage_uris(stage_uris)
-    print(query)
-    print(_make_sparql_query(query, triplestore_url))
+    print(f"stage {len(_make_sparql_query(query, triplestore_url))}")
