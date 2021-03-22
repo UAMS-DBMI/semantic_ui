@@ -1,4 +1,5 @@
 import React from 'react';
+import './mybarchart.css';
 
 function BarChart(props) {
 
@@ -8,7 +9,7 @@ function BarChart(props) {
     let count = props.data[key].length;
     if(count > max) max = count;
   }
-  for(var key in props.data){
+  for(key in props.data){
     let count = props.data[key].length;
     rows.push(<tr key={key}>
       <th scope="row">{key}</th>
@@ -16,10 +17,10 @@ function BarChart(props) {
     </tr>);
   }
   return (
-    <table className="charts-css bar show-labels">
+    <table className="my-charts-css bar show-labels">
       <thead>
         <tr>
-          <th scope='col'>Type</th>
+          <th scope='col'>Age</th>
           <th scope='col'>Count</th>
         </tr>
       </thead>
