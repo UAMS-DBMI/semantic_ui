@@ -165,3 +165,42 @@ def ids_from_disease_uris(disease_uris):
         {filter_line}
     }}"""
     return query
+
+if __name__ == '__main__':
+    import requests
+    def _make_sparql_query(query, triplestore_url):
+        payload = {'query': query}
+        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/sparql-results+json'}
+        r = requests.post(triplestore_url, data=payload, headers=headers)
+        r.raise_for_status()
+        ret = []
+        results = r.json()
+        vars = results['head']['vars']
+        for row in results['results']['bindings']:
+            new_row = {}
+            for var in vars:
+                if var in row.keys():
+                    new_row[var] = row[var]['value']
+            ret.append(new_row)
+        return ret
+    triplestore_url = 'http://localhost:7200/repositories/prism'
+    patient_ids = ['C3L-02219', 'C3N-02451']
+    query = all_from_patient_ids(patient_ids)
+    print(query)
+    print(_make_sparql_query(query, triplestore_url))
+    disease_uris = ['http://purl.obolibrary.org/obo/NCIT_C136709', 'http://purl.obolibrary.org/obo/NCIT_C4105']
+    query = ids_from_disease_uris(disease_uris)
+    print(query)
+    print(_make_sparql_query(query, triplestore_url))
+    location_uris = ['http://purl.obolibrary.org/obo/UBERON_0006518']
+    query = ids_from_location_uris(location_uris)
+    print(query)
+    print(_make_sparql_query(query, triplestore_url))
+    sex_uris = ['http://purl.obolibrary.org/obo/PATO_0000384']
+    query = ids_from_sex_uris(sex_uris)
+    print(query)
+    print(_make_sparql_query(query, triplestore_url))
+    stage_uris = ['http://purl.obolibrary.org/obo/NCIT_C28054']
+    query = ids_from_stage_uris(stage_uris)
+    print(query)
+    print(_make_sparql_query(query, triplestore_url))
