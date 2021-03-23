@@ -17,7 +17,7 @@ function RadioFilter(props) {
   async function fetchData(){
     setFetching(true);
     setDisableButton(true);
-    let url = '/api/data/' + props.data.name + '?';
+    let url = '/api/data/' + props.data.api + '?';
     let params = new URLSearchParams();
     let uris = Object.keys(filters).filter((uri) =>
       filters[uri].enabled
@@ -31,7 +31,7 @@ function RadioFilter(props) {
     for(var key in data){
       cohort = cohort.concat(data[key]);
     }
-    props.fetch(props.data.name, cohort);
+    props.fetch(props.data.api, cohort);
   }
 
   function modifyFilter(choice, checked){

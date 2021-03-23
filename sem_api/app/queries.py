@@ -50,15 +50,10 @@ SEX = """
 
 # the person's age
 AGE = """
-?ama rdf:type age_assay: .
-?ama has_spec_output: ?amd .
 ?amd rdf:type age_datum: .
+?amd about: ?person .
 ?amd has_value_spec: ?vspec .
 ?vspec has_spec_value: ?age .
-?vspec has_meas_unit_label: ?mul .
-?er rdf:type evaluant_role: .
-?er inheres: ?person .
-?ama realizes: ?er .
 """
 
 # parts of this person
@@ -123,7 +118,7 @@ def all_from_patient_ids(patient_ids):
                 filter (?x != ?stage_class)
             }}
         }}
-    }}"""
+    }} limit 100"""
     return query
 
 def ids_from_stage_uris(stage_uris):
@@ -188,6 +183,16 @@ def all_age():
     }}"""
     return query
 
+def labels_by_subclass(uri):
+    return f"""PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    select distinct ?value ?label ?definition where {{
+        ?value rdfs:subClassOf <{uri}> .
+        ?part sesame:directType ?value .
+        ?value rdfs:label ?label .
+        optional {{ ?value <http://purl.obolibrary.org/obo/IAO_0000115> ?definition . }}
+    }} order by ?label"""
+
 if __name__ == '__main__':
     import requests
     def _make_sparql_query(query, triplestore_url):
@@ -206,9 +211,8 @@ if __name__ == '__main__':
             ret.append(new_row)
         return ret
     triplestore_url = 'http://localhost:7200/repositories/prism'
-    patient_ids = ['C3L-02219', 'C3N-02451']
+    patient_ids = ['C3L-02219', 'C3N-02451', 'C3L-00016']
     query = all_from_patient_ids(patient_ids)
-    print(query)
     print(f"all {len(_make_sparql_query(query, triplestore_url))}")
     disease_uris = ['http://purl.obolibrary.org/obo/NCIT_C136709', 'http://purl.obolibrary.org/obo/NCIT_C4105']
     query = ids_from_disease_uris(disease_uris)
@@ -224,3 +228,6 @@ if __name__ == '__main__':
     print(f"stage {len(_make_sparql_query(query, triplestore_url))}")
     query = all_age()
     print(f"ages {len(_make_sparql_query(query, triplestore_url))}")
+    query = labels_by_subclass('http://purl.obolibrary.org/obo/UBERON_0001062')
+    print(query)
+    print(f"labels {len(_make_sparql_query(query, triplestore_url))}")

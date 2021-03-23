@@ -18,6 +18,7 @@ function TermTableRow(props){
     <tr className="filter_row" onClick={() => props.added(props.category, props.value)}>
       <td>{props.category}</td>
       <td>{props.label}</td>
+      <td>{props.definition}</td>
     </tr>
   )
 }
@@ -59,16 +60,16 @@ function FilterBox(props) {
     if('choices' in category){
       for(var choice of category.choices){
         if(choice.label.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0){
-          filtersArr.push({'category': category.name, 'label': choice.label, 'value': choice.value});
+          filtersArr.push({'category': category.name, 'label': choice.label, 'value': choice.value, 'definition': choice.definition});
         }
       }
     }
     if(category.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0){
-      filtersArr.push({'category': category.name, 'label': category.name, 'value': ''});
+      filtersArr.push({'category': category.name, 'label': category.name, 'value': '', 'definition': choice.definition});
     }
   }
   const filters = filtersArr.map((row, i) =>
-    <TermTableRow category={row.category} label={row.label} uri={row.value} key={i} added={added}/>
+    <TermTableRow category={row.category} label={row.label} definition={row.definition} uri={row.value} key={i} added={added}/>
   );
 
   /*function try_enter(){
@@ -126,6 +127,7 @@ function FilterBox(props) {
                   <tr>
                     <th>Category</th>
                     <th>Term</th>
+                    <th>Definition</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -153,7 +155,7 @@ function Beam() {
   const config = useFetch("/api/config");
 
   if(config === null){
-    return <span>...</span>
+    return <span>...loading...</span>
   }
 
   function reset_all(){
