@@ -12,6 +12,7 @@ function RadioFilter(props) {
   const [data, setData] = useState(null);
   const [fetching, setFetching] = useState(null);
   const [disableButton, setDisableButton] = useState(true);
+  const [allSelect, setAllSelect] = useState(false);
 
   async function fetchData(){
     setFetching(true);
@@ -42,6 +43,16 @@ function RadioFilter(props) {
         setDisableButton(false);
       }
     }
+    setFilters(newFilters);
+  }
+
+  function toggleAll(toggle){
+    let newFilters = {...filters};
+    for(var key in newFilters){
+      newFilters[key].enabled = toggle;
+    }
+    setDisableButton(false);
+    setAllSelect(toggle);
     setFilters(newFilters);
   }
 
@@ -103,6 +114,10 @@ function RadioFilter(props) {
       <h4>{props.data.name}</h4>
       <p>{props.data.label}</p>
       <div className="boxes">
+        <input type='checkbox'
+               style={{alignSelf: 'flex-start'}}
+               onClick={() => toggleAll(!allSelect)}
+               readOnly checked={allSelect}/>
         {input}
       </div>
       <div className="fetch-button">
