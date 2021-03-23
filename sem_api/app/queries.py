@@ -14,6 +14,14 @@ PREFIX identifier: <http://purl.obolibrary.org/obo/IAO_0020000>
 PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
 PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX age_assay: <http://purl.obolibrary.org/obo/OBI_0001158>
+PREFIX age_datum: <http://purl.obolibrary.org/obo/OBI_0001167>
+PREFIX has_spec_output: <http://purl.obolibrary.org/obo/OBI_0000299>
+PREFIX has_value_spec: <http://purl.obolibrary.org/obo/OBI_0001938>
+PREFIX has_spec_value: <http://purl.obolibrary.org/obo/OBI_0002135>
+PREFIX has_meas_unit_label: <http://purl.obolibrary.org/obo/IAO_0000039>
+PREFIX evaluant_role: <http://purl.obolibrary.org/obo/OBI_0000067>
+PREFIX realizes: <http://purl.obolibrary.org/obo/BFO_0000055>
 """
 
 PATIENT = """
@@ -42,9 +50,15 @@ SEX = """
 
 # the person's age
 AGE = """
-?ag inheres: ?person .
-?ag rdf:type age: .
-?ag rdfs:label ?age .
+?ama rdf:type age_assay: .
+?ama has_spec_output: ?amd .
+?amd rdf:type age_datum: .
+?amd has_value_spec: ?vspec .
+?vspec has_spec_value: ?age .
+?vspec has_meas_unit_label: ?mul .
+?er rdf:type evaluant_role: .
+?er inheres: ?person .
+?ama realizes: ?er .
 """
 
 # parts of this person
@@ -165,6 +179,15 @@ def ids_from_disease_uris(disease_uris):
     }}"""
     return query
 
+def all_age():
+    query = f"""{PREFIX}
+    select distinct ?patient_id ?age {{
+        # the subject identifier
+        {PATIENT}
+        {AGE}
+    }}"""
+    return query
+
 if __name__ == '__main__':
     import requests
     def _make_sparql_query(query, triplestore_url):
@@ -199,3 +222,5 @@ if __name__ == '__main__':
     stage_uris = ['http://purl.obolibrary.org/obo/NCIT_C28054']
     query = ids_from_stage_uris(stage_uris)
     print(f"stage {len(_make_sparql_query(query, triplestore_url))}")
+    query = all_age()
+    print(f"ages {len(_make_sparql_query(query, triplestore_url))}")
