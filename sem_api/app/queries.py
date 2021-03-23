@@ -213,7 +213,7 @@ if __name__ == '__main__':
     disease_uris = ['http://purl.obolibrary.org/obo/NCIT_C136709', 'http://purl.obolibrary.org/obo/NCIT_C4105']
     query = ids_from_disease_uris(disease_uris)
     print(f"disease {len(_make_sparql_query(query, triplestore_url))}")
-    location_uris = ['http://purl.obolibrary.org/obo/UBERON_0001872']
+    location_uris = ['http://purl.obolibrary.org/obo/UBERON_0001872', 'http://purl.obolibrary.org/obo/UBERON_0006518']
     query = ids_from_location_uris(location_uris)
     print(f"location {len(_make_sparql_query(query, triplestore_url))}")
     sex_uris = ['http://purl.obolibrary.org/obo/PATO_0000384']
