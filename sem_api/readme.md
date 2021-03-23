@@ -6,4 +6,6 @@ To run locally
 
 `pip install -r requirements.txt`
 
-`uvicorn app.semantic-api:app --reload`
+`cd app`
+
+`uvicorn semantic-api:app --reload`
