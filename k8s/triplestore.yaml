@@ -27,6 +27,9 @@ spec:
       containers:
       - image: tcia/graphdb:9.6.0
         name: triplestore
+        env:
+        - name: GDB_JAVA_OPTS
+          value: -Xmx8g -Xms2g
         ports:
         - containerPort: 7200
           name: triplestore

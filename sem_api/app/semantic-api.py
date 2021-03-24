@@ -66,7 +66,7 @@ def get_config():
         ],
         "type": "radio",
         "api": "sex",
-        "name": "Biological Sex",
+        "name": "Sex or Gender",
         "label": "Sex"
       },
       {
@@ -139,7 +139,7 @@ def get_config():
         "type": "radio",
         "name": "Brain Lobes",
         "api": "location",
-        "label": "The primary location of the disease.",
+        "label": "Lobes of the brain.",
         "choices": location_opts
     })
     return config

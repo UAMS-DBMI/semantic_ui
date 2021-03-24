@@ -152,6 +152,7 @@ function Beam() {
   const [showCollections, setShowCollections] = useState(false);
   const [allData, setAllData] = useState([]);
   const [cohortName, setCohortName] = useState("Unnamed");
+  const [fetching, setFetching] = useState(false);
 
   const config = useFetch("/api/config");
   const metadata = useFetch("/api/collections");
@@ -170,6 +171,7 @@ function Beam() {
     setShowCollections(false);
     setAllData([]);
     setCohortName("Unnamed");
+    setFetching(false);
   }
 
   function displayCohort(){
@@ -235,6 +237,8 @@ function Beam() {
     let cannotUnion = new Set(cannotArrays);
     let finalCohort = Array.from(mustIntersection).filter(x => !cannotUnion.has(x));
     setCurrentCohort(finalCohort);
+    setShowCohort(false);
+    setAllData([]);
     //fetch_all(finalCohort);
   }
 
@@ -253,6 +257,7 @@ function Beam() {
   }
 
   async function fetch_all(currentCohort){
+    setFetching(true);
     setAllData([]);
     let url = '/api/data?';
     let opts = {method: 'POST',
@@ -262,6 +267,7 @@ function Beam() {
                 };
     const response = await fetch(url, opts);
     let data = await response.json();
+    setFetching(false);
     setAllData(data);
   }
 
@@ -406,9 +412,10 @@ function Beam() {
       {
         (showCohort === true)
         ? <div className="currentCohort">
-            <DataTable data={allData} />
-            <h2>All Patient Ids</h2>
-            <p style={{width: '80%', wordWrap: 'break-word'}}>{currentCohort.join(',')}</p>
+            {fetching ?
+              <span>fetching...</span> :
+              <><h3>Sample Records</h3>
+              <DataTable data={allData} /></>}
           </div>
         : <></>
       }

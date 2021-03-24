@@ -91,15 +91,17 @@ function RadioFilter(props) {
   let input = check_boxes(filters);
 
   let total_count = '';
+  let patient_ids = new Set();
   if(data !== null){
-    let patient_count = 0;
     let max = 0;
     for(var key in data){
       let count = data[key].length;
-      patient_count += count;
       if(count > max) max = count;
+      for(var patient_id of data[key]){
+        patient_ids.add(patient_id);
+      }
     }
-    total_count = patient_count + ' total subjects';
+    total_count = patient_ids.size + ' unique subjects';
     input = (<table className="my-charts-css bar reverse">
           <tbody>
             {bar_boxes(filters, max)}

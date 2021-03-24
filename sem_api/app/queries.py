@@ -80,7 +80,7 @@ STAGE = """
 
 def all_from_patient_ids(patient_ids):
     formatted_ids = ["'{}'".format(x) for x in patient_ids]
-    filter_line = "filter(?patient_id in ({})) .".format(','.join(formatted_ids))
+    filter_line = "values ?patient_id {{{}}} .".format(' '.join(formatted_ids))
     query = f"""{PREFIX}
     select distinct ?collection ?patient_id ?sexlabel ?age ?location ?disease_type ?stagelabel {{
         {PATIENT}
@@ -118,7 +118,7 @@ def all_from_patient_ids(patient_ids):
                 filter (?x != ?stage_class)
             }}
         }}
-    }} limit 100"""
+    }} limit 10"""
     return query
 
 def ids_from_stage_uris(stage_uris):
@@ -255,8 +255,9 @@ if __name__ == '__main__':
             ret.append(new_row)
         return ret
     triplestore_url = 'http://localhost:7200/repositories/prism'
-    patient_ids = ['C3L-02219', 'C3N-02451', 'C3L-00016']
+    patient_ids = ['C3L-02219', 'C3N-02451', 'C3L-00016', 'BreastDX-01-0038']
     query = all_from_patient_ids(patient_ids)
+    print(query)
     print(f"all {len(_make_sparql_query(query, triplestore_url))}")
     disease_uris = ['http://purl.obolibrary.org/obo/NCIT_C136709', 'http://purl.obolibrary.org/obo/NCIT_C4105']
     query = ids_from_disease_uris(disease_uris)
