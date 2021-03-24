@@ -167,8 +167,14 @@ function Beam() {
     setCannotCohort({});
     setCurrentCohort([]);
     setShowCohort(false);
+    setShowCollections(false);
     setAllData([]);
     setCohortName("Unnamed");
+  }
+
+  function displayCohort(){
+    setShowCohort(!showCohort);
+    if (!showCohort) fetch_all(currentCohort);
   }
 
   function add_must_filter(category, uri){
@@ -229,7 +235,7 @@ function Beam() {
     let cannotUnion = new Set(cannotArrays);
     let finalCohort = Array.from(mustIntersection).filter(x => !cannotUnion.has(x));
     setCurrentCohort(finalCohort);
-    fetch_all(finalCohort);
+    //fetch_all(finalCohort);
   }
 
   function add_must_cohort(name, patient_ids){
@@ -315,7 +321,7 @@ function Beam() {
             <div style={{overflow: 'hidden'}}>
               <input className="cohort_name" value={cohortName} onChange={(e) => setCohortName(e.target.value)}/>
               <div style={{display: 'flex'}}>
-                <button className="cohort_size_button" onClick={() => setShowCohort(!showCohort)}>
+                <button className="cohort_size_button" onClick={() => displayCohort()}>
                   <svg className="filter_button" viewBox="0 0 490 490">
                     <path opacity="0.4" fill="none" stroke="#000" strokeWidth="36" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
                   </svg>

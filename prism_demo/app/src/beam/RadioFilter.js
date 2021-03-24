@@ -114,10 +114,13 @@ function RadioFilter(props) {
       <h4>{props.data.name}</h4>
       <p>{props.data.label}</p>
       <div className="boxes">
+        <label>
         <input type='checkbox'
                style={{alignSelf: 'flex-start'}}
                onClick={() => toggleAll(!allSelect)}
                readOnly checked={allSelect}/>
+         Toggle All
+         </label>
         {input}
       </div>
       <div className="fetch-button">
