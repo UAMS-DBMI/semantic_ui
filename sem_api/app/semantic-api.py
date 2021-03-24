@@ -8,6 +8,7 @@ import json
 import requests
 import os
 import queries as queries
+import random
 
 TRIPLESTORE_URL = os.getenv('SEMAPI_TRIPLESTORE_URL', 'http://localhost:7200/repositories/prism')
 
@@ -235,7 +236,11 @@ class PIDS(BaseModel):
 
 @app.post("/data")
 def post_all_data(patient_ids: PIDS):
-    query = queries.all_from_patient_ids(patient_ids.patient_ids)
+    random_count = 10
+    if(len(patient_ids.patient_ids) < random_count):
+        random_count = len(patient_ids.patient_ids)
+    ids = random.sample(patient_ids.patient_ids, 10)
+    query = queries.all_from_patient_ids(ids)
     results = make_data_table_query(query)
     return results
 

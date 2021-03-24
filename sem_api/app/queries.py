@@ -83,8 +83,8 @@ def all_from_patient_ids(patient_ids):
     filter_line = "values ?patient_id {{{}}} .".format(' '.join(formatted_ids))
     query = f"""{PREFIX}
     select distinct ?collection ?patient_id ?sexlabel ?age ?location ?disease_type ?stagelabel {{
-        {PATIENT}
         {filter_line}
+        {PATIENT}
         optional{{
             {SEX}
         }}
@@ -118,7 +118,7 @@ def all_from_patient_ids(patient_ids):
                 filter (?x != ?stage_class)
             }}
         }}
-    }} limit 10"""
+    }}"""
     return query
 
 def ids_from_stage_uris(stage_uris):
