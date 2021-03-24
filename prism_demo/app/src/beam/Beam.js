@@ -149,10 +149,12 @@ function Beam() {
   const [cannotCohort, setCannotCohort] = useState({});
   const [currentCohort, setCurrentCohort] = useState([]);
   const [showCohort, setShowCohort] = useState(false);
+  const [showCollections, setShowCollections] = useState(false);
   const [allData, setAllData] = useState([]);
   const [cohortName, setCohortName] = useState("Unnamed");
 
   const config = useFetch("/api/config");
+  const metadata = useFetch("/api/collections");
 
   if(config === null){
     return <span>...loading...</span>
@@ -245,6 +247,7 @@ function Beam() {
   }
 
   async function fetch_all(currentCohort){
+    setAllData([]);
     let url = '/api/data?';
     let opts = {method: 'POST',
                 body: JSON.stringify(
@@ -274,14 +277,37 @@ function Beam() {
   params.set('PatientCriteria', currentCohort.join(','));
   const nbia_link = 'https://nbia.cancerimagingarchive.net/nbia-search/?' + params;
 
+  const allFeatures = metadata.features.map((feature) =>
+    <th key={feature}>{feature.substr(18)}</th>
+  );
+
+  function x_from_features(all_features, my_features){
+    return all_features.map((feature) => {
+      let x = my_features.indexOf(feature) >= 0;
+
+      return <td key={feature} className="col_feature">{x ? 'X' : ''}</td>
+    }
+    );
+  }
+
   return (
     <div>
       <header className="Beam-header">
         <div className="header_section" style={{flexGrow:1}}>
           <h2 className="collection_size header_title">Collection Size</h2>
-          <span>1,082 subjects</span>
-          <br/>
-          <span>{config.length} data elements</span>
+          <div className="collection_info">
+            <span>{metadata.total.toLocaleString()} total subjects</span>
+            <br/>
+            <span>{metadata.features.length} data elements</span>
+            <br/>
+            <span>{metadata.collections.length} collections</span>
+            <button className="show_collection_button" onClick={() => setShowCollections(!showCollections)}>
+              <svg className="filter_button" viewBox="0 0 490 490">
+                <path opacity="0.4" fill="none" stroke="#000" strokeWidth="36" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
+              </svg>
+              <span>{showCollections ? "Hide" : "Show" } Collections</span>
+            </button>
+          </div>
         </div>
         <div className="header_section" style={{flexGrow:3}}>
           <h2 className="header_title">Current Cohort - {currentCohort.length} subjects</h2>
@@ -345,6 +371,32 @@ function Beam() {
           </div>
         </div>
       </header>
+      {
+        (showCollections === true)
+        ? <div className="collection_table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Collection</th>
+                  <th>Description</th>
+                  <th>Count</th>
+                  {allFeatures}
+                </tr>
+              </thead>
+              <tbody>
+                {metadata.collections.map((col) =>
+                  <tr key={col.link}>
+                    <td><a href={col.link}>{col.name}</a></td>
+                    <td>{col.desc}</td>
+                    <td>{col.count}</td>
+                    {x_from_features(metadata.features, col.features)}
+                  </tr>
+                 )}
+              </tbody>
+            </table>
+          </div>
+        : <></>
+      }
       {
         (showCohort === true)
         ? <div className="currentCohort">

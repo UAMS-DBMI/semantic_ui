@@ -183,6 +183,50 @@ def all_age():
     }}"""
     return query
 
+def collection_metadata():
+    return """PREFIX collection: <http://purl.org/PRISM#PRISM_0000001>
+PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX description: <http://purl.org/dc/elements/1.1/description>
+PREFIX data_item: <http://purl.obolibrary.org/obo/IAO_0000027>
+
+select ?name ?link ?desc ?tl {
+    ?c rdf:type collection: .
+    ?c rdfs:label ?name .
+    ?c rdfs:seeAlso ?link .
+    ?c description: ?desc .
+    ?c has_part: ?x .
+    ?x rdf:type ?t .
+    ?t rdfs:label ?tl .
+    ?t rdfs:subClassOf data_item: .
+} order by ?name"""
+
+def collection_counts():
+    return """PREFIX collection: <http://purl.org/PRISM#PRISM_0000001>
+PREFIX subject_id: <http://purl.org/PRISM#PRISM_0000002>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX denotes: <http://purl.obolibrary.org/obo/IAO_0000219>
+PREFIX has_part: <http://purl.obolibrary.org/obo/BFO_0000051>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?collection (count(?patient_id) as ?patient_count) {
+
+    # the subject identifier
+    ?id denotes: ?person .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+    # collection, collection name
+    ?c rdf:type collection: .
+    ?c rdfs:label ?collection .
+
+    # collections have subject ids as parts
+    ?c has_part: ?id .
+    ?id rdf:type subject_id: .
+    ?id rdfs:label ?patient_id .
+
+} group by ?collection"""
+
 def labels_by_subclass(uri):
     return f"""PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>

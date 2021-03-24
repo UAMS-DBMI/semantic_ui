@@ -99,6 +99,17 @@ def get_config():
         'choices': brain_opts
     })
 
+    # breast located diseases
+    query = queries.labels_by_subclass('http://purl.obolibrary.org/obo/NCIT_C26709')
+    breast_opts = make_sparql_query(query)
+    config.append({
+        'type': 'radio',
+        'api': 'disease',
+        'name': 'Breast Diseases',
+        'label': 'Diseases located in the breast.',
+        'choices': breast_opts
+    })
+
     # stage information
     query = queries.labels_by_subclass('http://purl.obolibrary.org/obo/NCIT_C28108')
     stage_opts = make_sparql_query(query)
@@ -132,6 +143,38 @@ def get_config():
         "choices": location_opts
     })
     return config
+
+@app.get("/collections")
+def get_collections():
+    query = queries.collection_metadata()
+    results = make_sparql_query(query)
+    query = queries.collection_counts()
+    count_results = make_sparql_query(query)
+    counts = {}
+    total_count = 0
+    for row in count_results:
+        counts[row['collection']] = row['patient_count']
+        total_count += int(row['patient_count'])
+    all_features = []
+    ret = []
+    last_col = ''
+    cur_col = {}
+    for row in results:
+        if row['tl'] not in all_features:
+            all_features.append(row['tl'])
+        if row['name'] != last_col:
+            if last_col != '':
+                ret.append(cur_col)
+            cur_col = {'name': row['name'],
+                       'link': row['link'],
+                       'desc': row['desc'],
+                       'count': counts[row['name']],
+                       'features': [row['tl']]}
+            last_col = row['name']
+        else:
+            cur_col['features'].append(row['tl'])
+    ret.append(cur_col)
+    return {'total': total_count, 'features': all_features, 'collections': ret}
 
 @app.get("/data/disease")
 def get_disease_data(uris: str = None):

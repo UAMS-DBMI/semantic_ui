@@ -170,9 +170,39 @@ tr.filter_row:hover {
   width: 100%;
 }
 
+.show_collection_button {
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+  width: 50%;
+}
+
+.collection_info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
 .row_flex {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+}
+
+.collection_table th {
+  text-align: left;
+  text-transform: capitalize;
+}
+
+.collection_table tbody tr:nth-child(odd){
+  background-color: #E2E6EE;
+}
+
+.col_feature {
+  text-align: center;
 }
