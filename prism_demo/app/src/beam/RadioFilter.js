@@ -31,7 +31,7 @@ function RadioFilter(props) {
     for(var key in data){
       cohort = cohort.concat(data[key]);
     }
-    props.fetch(props.data.api, cohort);
+    props.fetch(props.data.name, cohort);
   }
 
   function modifyFilter(choice, checked){

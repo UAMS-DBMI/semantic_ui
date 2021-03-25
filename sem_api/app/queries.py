@@ -78,6 +78,16 @@ STAGE = """
 ?stage_class rdfs:label ?stagelabel .
 """
 
+STAGE_OPT = """
+?dis_inst2 inheres: ?ppart .
+?dis_inst2 rdf:type ?dt2 .
+?dt2 rdfs:subClassOf diseasedisorderfinding: .
+?stage_inst rdf:type ?stage_class .
+?stage_inst about: ?dis_inst2 .
+?stage_class rdfs:subClassOf diseasestage: .
+?stage_class rdfs:label ?stagelabel .
+"""
+
 def all_from_patient_ids(patient_ids):
     formatted_ids = ["'{}'".format(x) for x in patient_ids]
     filter_line = "values ?patient_id {{{}}} .".format(' '.join(formatted_ids))
@@ -91,14 +101,12 @@ def all_from_patient_ids(patient_ids):
         optional{{
             {AGE}
         }}
-        optional{{
-            {LOCATION}
-            # want only the immediate location type -- not superclasses like 'organ subunit'
-            FILTER NOT EXISTS{{
-                ?ppart rdf:type ?x .
-                ?x rdfs:subClassOf ?loctype.
-                filter (?x != ?loctype)
-            }}
+        {LOCATION}
+        # want only the immediate location type -- not superclasses like 'organ subunit'
+        FILTER NOT EXISTS{{
+            ?ppart rdf:type ?x .
+            ?x rdfs:subClassOf ?loctype.
+            filter (?x != ?loctype)
         }}
         optional{{
             {DISEASE}
@@ -110,7 +118,7 @@ def all_from_patient_ids(patient_ids):
             }}
         }}
         optional{{
-            {STAGE}
+            {STAGE_OPT}
             # want only the immediate stage type
             FILTER NOT EXISTS{{
                 ?stage_inst rdf:type ?x .

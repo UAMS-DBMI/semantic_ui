@@ -224,6 +224,12 @@ function Beam() {
   }
 
   function update_current_cohort(mustCohort, cannotCohort){
+    if(mustCohort.length === 0){
+      setCurrentCohort([]);
+      setShowCohort(false);
+      setAllData([]);
+      return;
+    }
     let mustSets = [];
     Object.keys(mustCohort).map((cohort) => mustSets.push(new Set(mustCohort[cohort])));
     var mustIntersection = new Set();
