@@ -157,7 +157,7 @@ function Beam() {
   const config = useFetch("/api/config");
   const metadata = useFetch("/api/collections");
 
-  if(config === null){
+  if(config === null || metadata === null){
     return <span>...loading...</span>
   }
 
