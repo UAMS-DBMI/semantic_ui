@@ -239,7 +239,7 @@ def post_all_data(patient_ids: PIDS):
     random_count = 10
     if(len(patient_ids.patient_ids) < random_count):
         random_count = len(patient_ids.patient_ids)
-    ids = random.sample(patient_ids.patient_ids, 10)
+    ids = random.sample(patient_ids.patient_ids, random_count)
     query = queries.all_from_patient_ids(ids)
     results = make_data_table_query(query)
     return results
