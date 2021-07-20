@@ -5,8 +5,10 @@ import './mybarchart.css';
 
 function RadioFilter(props) {
   let startingFilters = {};
-  for(let f of props.data.choices){
-    startingFilters[f['value']] = {'enabled': false, 'label': f['label']};
+  if(props.data.choices){
+    for(let f of props.data.choices){
+      startingFilters[f['value']] = {'enabled': false, 'label': f['label']};
+    }
   }
   const [filters, setFilters] = useState(startingFilters);
   const [data, setData] = useState(null);
