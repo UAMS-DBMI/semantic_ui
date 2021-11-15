@@ -3,6 +3,9 @@ import './Beam.css';
 import RedcapFilter from './Redcapfilter';
 import DataTable from './DataTable';
 import { useFetch } from './useFetch';
+import DataLogo from './data_logo.svg';
+import FilesLogo from './files_logo.svg';
+import PersonLogo from './person_logo.svg';
 
 function CategoryTableRow(props){
   return (
@@ -65,7 +68,7 @@ function FilterBox(props) {
       }
     }
     if(category.name.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0){
-      filtersArr.push({'category': category.name, 'label': category.name, 'value': '', 'definition': choice.definition});
+      filtersArr.push({'category': category.name, 'label': category.name, 'value': '', 'definition': category.definition});
     }
   }
   const filters = filtersArr.map((row, i) =>
@@ -103,8 +106,8 @@ function FilterBox(props) {
               </svg>
             </span>
           </div>
-          <div className="filter_results_container" style={{display: (showBox ? 'block' : 'none')}}>
-            <button style={{float: 'right'}} onClick={() => clear_all()}>Close</button>
+          <div className="filter_results_container" style={{display: (showBox ? 'flex' : 'none')}}>
+            <button style={{alignSelf: 'flex-end'}} onClick={() => clear_all()}>Close</button>
             <div className="filter_list">
               <table className="filter_table">
                 <thead>
@@ -119,8 +122,8 @@ function FilterBox(props) {
               </table>
             </div>
           </div>
-          <div className="filter_results_container" style={{display: (textFilter !== "" ? 'block' : 'none')}}>
-            <button style={{float: 'right'}} onClick={() => clear_all()}>Close</button>
+          <div className="filter_results_container" style={{display: (textFilter !== "" ? 'flex' : 'none')}}>
+            <button style={{alignSelf: 'flex-end'}} onClick={() => clear_all()}>Close</button>
             <div className="filter_list">
               <table className="filter_table">
                 <thead>
@@ -294,6 +297,7 @@ function Beam() {
   let params = new URLSearchParams();
   params.set('PatientCriteria', currentCohort.join(','));
   const nbia_link = 'https://nbia.cancerimagingarchive.net/nbia-search/?' + params;
+//const nbia_link = 'https://portal.aries.uams.edu/nbia-search/?' + params;
 
   const allFeatures = metadata.features.map((feature) =>
     <th key={feature}>{feature.substr(18)}</th>
@@ -311,51 +315,41 @@ function Beam() {
   return (
     <div>
       <header className="Beam-header">
-        <div className="header_section" style={{flexGrow:1}}>
-          <h2 className="collection_size header_title">Collection Size</h2>
+        <div className="header_section" style={{flexGrow:0}}>
+          <h2 className="collection_size">Repository Overview</h2>
           <div className="collection_info">
-            <span>{metadata.total.toLocaleString()} total subjects</span>
-            <br/>
-            <span>{metadata.features.length} data elements</span>
-            <br/>
-            <span>{metadata.collections.length} collections</span>
-            <button className="show_collection_button" onClick={() => setShowCollections(!showCollections)}>
-              <svg className="filter_button" viewBox="0 0 490 490">
-                <path opacity="0.4" fill="none" stroke="#000" strokeWidth="36" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
-              </svg>
-              <span>{showCollections ? "Hide" : "Show" } Collections</span>
-            </button>
-          </div>
-        </div>
-        <div className="header_section" style={{flexGrow:3}}>
-          <h2 className="header_title">Current Cohort - {currentCohort.length} subjects</h2>
-          <div className="row_flex">
-            <div style={{overflow: 'hidden'}}>
-              <input className="cohort_name" value={cohortName} onChange={(e) => setCohortName(e.target.value)}/>
-              <div style={{display: 'flex'}}>
-                <button className="cohort_size_button" onClick={() => displayCohort()}>
-                  <svg className="filter_button" viewBox="0 0 490 490">
-                    <path opacity="0.4" fill="none" stroke="#000" strokeWidth="36" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
-                  </svg>
-                  <span>{showCohort ? "Hide" : "Show" } Subjects</span>
-                </button>
-                <a style={{textDecoration: 'none', width: '100%'}} href={downloadLink}>
-                  <button className="cohort_size_button">
-                    <svg version="1.1" viewBox="0 0 20 20" height="2em" with="2em">
-                      <path
-                        fill="#555753" opacity="0.5"
-                        d="M.5 9.9a.5.5 0 01.5.5v2.5a1 1 0 001 1h12a1 1 0 001-1v-2.5a.5.5 0 011 0v2.5a2 2 0 01-2 2H2a2 2 0 01-2-2v-2.5a.5.5 0 01.5-.5z"
-                      />
-                      <path
-                        fill="#555753" opacity="0.5"
-                        d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8.5 10.293V1.5a.5.5 0 00-1 0v8.793L5.354 8.146a.5.5 0 10-.708.708l3 3z"
-                      />
-                    </svg>
-                    <span>Download CSV</span>
-                  </button>
-                </a>
+            <div className="collection_info_category">
+              <h4>Subjects</h4>
+              <div className="collection_icon_row">
+                <img className="collection_icons" src={PersonLogo} alt="Person Icon"/>
+                <span>{metadata.total.toLocaleString()}</span>
               </div>
             </div>
+            <div className="collection_info_category">
+              <h4>Data Elements</h4>
+              <div className="collection_icon_row">
+                <img className="collection_icons" src={DataLogo} alt="Data Icon"/>
+                <span>{metadata.features.length}</span>
+              </div>
+            </div>
+            <div className="collection_info_category">
+              <h4>Collections</h4>
+              <div className="collection_icon_row">
+                <img className="collection_icons" src={FilesLogo} alt="Collection Icon"/>
+                <span>{metadata.collections.length}</span>
+              </div>
+            </div>
+          </div>
+          <button className="show_collection_button" onClick={() => setShowCollections(!showCollections)}>
+            <svg className="filter_button" viewBox="0 0 490 490">
+              <path opacity="0.4" fill="none" stroke="#000" strokeWidth="36" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
+            </svg>
+            <span>{showCollections ? "Hide" : "Show" } Collections</span>
+          </button>
+        </div>
+        <div className="header_section" style={{flexGrow:0}}>
+          <h2 className="">Current Cohort - {currentCohort.length} subjects</h2>
+          <div className="row_flex">
             <button className="tallButton" onClick={() => reset_all()}>
               <svg version="1.1" viewBox="0 0 70 70" height="3em" with="3em">
                 <g>
@@ -365,10 +359,34 @@ function Beam() {
                   </g>
                 </g>
               </svg>
-              <span>New</span>
+              <span>Reset Filters</span>
             </button>
+            <button className="tallButton"
+                    disabled={currentCohort.length == 0}
+                    onClick={() => displayCohort()}>
+              <svg className="filter_button" viewBox="0 0 490 490">
+                <path opacity="0.4" fill="none" stroke="#000" strokeWidth="36" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
+              </svg>
+              <span>{showCohort ? "Hide" : "Preview" } Subjects ({currentCohort.length})</span>
+            </button>
+            <a style={{textDecoration: 'none'}} href={downloadLink}>
+              <button className="tallButton"
+                      disabled={currentCohort.length == 0}>
+                <svg version="1.1" viewBox="0 0 20 20" height="2em" with="2em">
+                  <path
+                    fill="#555753" opacity="0.5"
+                    d="M.5 9.9a.5.5 0 01.5.5v2.5a1 1 0 001 1h12a1 1 0 001-1v-2.5a.5.5 0 011 0v2.5a2 2 0 01-2 2H2a2 2 0 01-2-2v-2.5a.5.5 0 01.5-.5z"
+                  />
+                  <path
+                    fill="#555753" opacity="0.5"
+                    d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8.5 10.293V1.5a.5.5 0 00-1 0v8.793L5.354 8.146a.5.5 0 10-.708.708l3 3z"
+                  />
+                </svg>
+                <span>Download CSV ({currentCohort.length})</span>
+              </button>
+            </a>
             <a href={nbia_link} style={{textDecoration: 'none'}} target='_'>
-              <button className="tallButton">
+              <button disabled={currentCohort.length == 0} className="tallButton">
                 <svg
                   fill="currentColor"
                   viewBox="0 0 16 16"

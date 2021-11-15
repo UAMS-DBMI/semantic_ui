@@ -5,6 +5,7 @@
   justify-content: space-evenly;
   height: 14em;
   padding-bottom: 1em;
+  padding-top: 1em;
 }
 
 .App-link {
@@ -25,8 +26,12 @@
   padding: 0.25em 1em;
   border-top-left-radius: .25em;
   border-top-right-radius: .25em;
-  background-color: pink;
+  background-color: #8D44CE78;
   color: black;
+}
+
+.filter_table tr:nth-child(even){
+  background-color: #e9e9e9;
 }
 
 .filter_container {
@@ -34,9 +39,9 @@
   margin-top: 0.25em;
   align-items: center;
   justify-content: space-between;
-  border-radius: 0.25em;
-  border: 1px solid pink;
-  box-shadow: pink 0px 0px 0.25em;
+  box-shadow: #8D44CE78 0px 0px 0.25em;
+  border-radius: 0 .25em .25em 0.25em;
+  border: 1px solid #8D44CE78;
   width: 100%;
 }
 
@@ -65,14 +70,14 @@
 .explore_button {
   border: 0px none;
   margin: 0px 0px 0px 0.5em;
-  background: pink none repeat scroll 0% 0%;
+  background: #8D44CE78 none repeat scroll 0% 0%;
   display: flex;
   align-items: center;
   justify-content: center;
   align-self: stretch;
   font-size: 1.125em;
   padding: 0px 0.5em;
-  border-radius: 0.22222em;
+  border-radius: 0 3px 3px 0;
 }
 
 .filter_search_input {
@@ -83,6 +88,7 @@
   width: 100%;
   font-size: 1em;
   padding: .625em 2em .625em 1.125em;
+  border-radius: 0 .25em .25em .25em;
 }
 
 .filter_results_container {
@@ -95,6 +101,8 @@
   color: #2e2b2b;
   z-index: 999;
   box-shadow: 0 10px 20px 5px rgba(0,0,0,.1);
+  border-radius: 0 0 .25em .25em;
+  flex-direction: column;
 }
 
 .category_container {
@@ -106,7 +114,7 @@
   display: flex;
   align-items: center;
   height: 32px;
-  border: 1px solid pink;
+  border: 1px solid #8D44CE78;
   border-radius: 3px;
   cursor: pointer;
   position: relative;
@@ -114,7 +122,7 @@
 }
 
 tr.filter_row:hover {
-  background-color: lightpink;
+  background-color: #8D44CE78;
 }
 
 .filter_containers {
@@ -142,18 +150,14 @@ tr.filter_row:hover {
 .header_section {
   display: flex;
   flex-direction: column;
-  border-left: 0.15em solid #665b5d;
-  border-bottom: 0.15em solid #665b5d;
-  border-right: 0.15em solid #665b5d;
   width: 100%;
-  background: #e6e0e1;
-  color: rgb(16, 50, 71);
+  background: #e9e9e9;
+  color: #222222;
   height: 100%;
   text-align: center;
   flex-basis: content;
-}
-
-.header_title {
+  border-radius: 10px;
+  padding: .5em;
 }
 
 .cohort_name {
@@ -170,6 +174,10 @@ tr.filter_row:hover {
   width: 100%;
 }
 
+.collection_size {
+  margin-bottom: 0em;
+}
+
 .show_collection_button {
   height: 3em;
   display: flex;
@@ -177,14 +185,33 @@ tr.filter_row:hover {
   justify-content: space-between;
   padding: 1em;
   width: 50%;
+  align-self: center;
 }
 
 .collection_info {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-evenly;
   height: 100%;
+}
+
+.collection_info h4 {
+  margin-top: .5em;
+}
+
+.collection_info_category {
+  margin: 1em;
+}
+
+.collection_icon_row {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.collection_icons {
+  width: 20px;
+  height: 20px;
 }
 
 .row_flex {

@@ -1,9 +1,30 @@
 .header {
-  height: 10em;
-  background-image: url('./aries-bkgd-plain.jpg');
+  height: 260px;
+  background-image: url('./tcia-header-bkgd.jpg');
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+
+  background-position: top left;
+  width: 100%;
+  background-size: cover;
+}
+
+.header_top {
+  width: 85%;
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+
+.header_title {
+  color: white;
+  font-size: 30.6px;
+  line-height: 25.5px;
+  font-family: "Open Sans";
+  letter-spacing: -1px;
+  font-weight: 400;
 }
 
 .logo {
@@ -23,7 +44,8 @@
   color: #ffffff !important;
   opacity: 0.75;
   transition: opacity 0.2s ease, color 0.2s ease;
-  font-size: 1.1em;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .header_link:hover {

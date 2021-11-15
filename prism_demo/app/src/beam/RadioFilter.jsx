@@ -24,7 +24,17 @@ function RadioFilter(props) {
     let uris = Object.keys(filters).filter((uri) =>
       filters[uri].enabled
     )
-    params.set('uris', uris.join(','));
+    if(props.data.api.includes('raw')){
+      params.set('name', props.data.name);
+    }
+    if(props.data.api.includes('raw') && !props.data.api.includes('checkbox')){
+      let bad_uris = uris.map((uri) =>
+        filters[uri].label
+      );
+      params.set('uris', bad_uris.join(','));
+    } else {
+      params.set('uris', uris.join(','));
+    }
     const response = await fetch(url + params);
     setFetching(false);
     let data = await response.json();

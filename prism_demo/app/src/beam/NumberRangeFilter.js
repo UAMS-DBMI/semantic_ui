@@ -12,8 +12,11 @@ function NumberRangeFilter(props) {
   async function fetchData(){
     setDisableButton(true);
     setFetching(true);
-    let url = '/api/age?';
+    let url = '/api/data/' + props.data.api + '?';
     let params = new URLSearchParams();
+    if(props.data.api == 'raw-calc'){
+      params.set('name', props.data.name);
+    }
     if(greaterThan !== "") params.set('min', greaterThan);
     if(lessThan !== "") params.set('max', lessThan);
     const response = await fetch(url + params);
@@ -31,8 +34,8 @@ function NumberRangeFilter(props) {
   let total_count = '';
   if(data !== null){
     let patient_count = 0;
-    for(var age in data){
-      patient_count += data[age].length;
+    for(var col in data){
+      patient_count += data[col].length;
     }
     total_count = patient_count + ' total subjects';
     summary = <div>
