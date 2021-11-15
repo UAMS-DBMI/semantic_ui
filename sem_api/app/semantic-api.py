@@ -244,7 +244,7 @@ def post_all_data(patient_ids: PIDS):
     results = make_data_table_query(query)
     return results
 
-@app.get("/age")
+@app.get("/data/age")
 def get_age_data(min: int = None, max: int = None):
     query = queries.all_age()
     results = make_sparql_query(query)

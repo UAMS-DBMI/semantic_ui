@@ -262,7 +262,7 @@ if __name__ == '__main__':
                     new_row[var] = row[var]['value']
             ret.append(new_row)
         return ret
-    triplestore_url = 'http://localhost:7200/repositories/prism'
+    triplestore_url = 'http://triplestore-prism.apps.dbmi.cloud/rdf4j-server/repositories/prism'
     patient_ids = ['C3L-02219', 'C3N-02451', 'C3L-00016', 'BreastDX-01-0038']
     query = all_from_patient_ids(patient_ids)
     print(query)

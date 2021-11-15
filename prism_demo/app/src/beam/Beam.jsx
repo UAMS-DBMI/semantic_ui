@@ -312,6 +312,14 @@ function Beam() {
     );
   }
 
+  const concept_count = config.reduce(function(sum, feature) {
+    if(Object.keys(feature).includes('choices')){
+      return sum + feature['choices'].length;
+    } else {
+      return sum + 1;
+    }
+  }, 0);
+
   return (
     <div>
       <header className="Beam-header">
@@ -326,17 +334,17 @@ function Beam() {
               </div>
             </div>
             <div className="collection_info_category">
-              <h4>Data Elements</h4>
-              <div className="collection_icon_row">
-                <img className="collection_icons" src={DataLogo} alt="Data Icon"/>
-                <span>{metadata.features.length}</span>
-              </div>
-            </div>
-            <div className="collection_info_category">
               <h4>Collections</h4>
               <div className="collection_icon_row">
                 <img className="collection_icons" src={FilesLogo} alt="Collection Icon"/>
                 <span>{metadata.collections.length}</span>
+              </div>
+            </div>
+            <div className="collection_info_category">
+              <h4>Concepts</h4>
+              <div className="collection_icon_row">
+                <img className="collection_icons" src={DataLogo} alt="Data Icon"/>
+                <span>{concept_count}</span>
               </div>
             </div>
           </div>

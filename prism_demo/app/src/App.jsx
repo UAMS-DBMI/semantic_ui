@@ -41,7 +41,7 @@ function App() {
               </a>
             </div>
           </div>
-          <h1 className="header_title">Semantic Search</h1>
+          <h1 className="header_title">Semantic Search Cohort Builder</h1>
         </nav>
         <div className="main_container">
           <Switch>
