@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: triplestore
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: triplestore
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: triplestore
+spec:
+  selector:
+    matchLabels:
+      app: triplestore
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: triplestore
+    spec:
+      containers:
+      - image: obotools/rdf4j:latest
+        name: triplestore
+        env:
+        - name: GDB_JAVA_OPTS
+          value: -Xmx8g -Xms2g -Drdf4j.server.txn.registry.timeout=0
+        ports:
+        - containerPort: 8080
+          name: triplestore
+        volumeMounts:
+        - name: triplestore-persistent-storage
+          mountPath: /var/rdf4j
+      volumes:
+      - name: triplestore-persistent-storage
+        persistentVolumeClaim:
+          claimName: triplestore-pv-claim-auto
