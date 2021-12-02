@@ -285,6 +285,7 @@ function Beam() {
   dParams.set('patient_ids', currentCohort.join(','));
   dParams.set('downloadFile', cohortName);
   const downloadLink = dUrl + dParams;
+  let disable_download = downloadLink.length > 2000;
 
   const mustFilterBoxes = mustFilters.map(row =>
     <RedcapFilter data={get_data(row)} key={row} remove={remove_must_filter} fetch={add_must_cohort}/>
@@ -394,7 +395,7 @@ function Beam() {
               </button>
             </a>
             <a href={nbia_link} style={{textDecoration: 'none'}} target='_'>
-              <button disabled={currentCohort.length == 0} className="tallButton">
+              <button disabled={currentCohort.length == 0 || disable_download} className="tallButton">
                 <svg
                   fill="currentColor"
                   viewBox="0 0 16 16"
@@ -409,7 +410,7 @@ function Beam() {
                     d="M7.646 11.854a.5.5 0 00.708 0l3-3a.5.5 0 00-.708-.708L8.5 10.293V1.5a.5.5 0 00-1 0v8.793L5.354 8.146a.5.5 0 10-.708.708l3 3z"
                   />
                 </svg>
-                <span>Browse Files</span>
+                <span>{disable_download ? "Too Many Subjects" : "Browse Files"}</span>
               </button>
             </a>
           </div>
