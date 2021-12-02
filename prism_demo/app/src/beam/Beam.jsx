@@ -285,7 +285,7 @@ function Beam() {
   dParams.set('patient_ids', currentCohort.join(','));
   dParams.set('downloadFile', cohortName);
   const downloadLink = dUrl + dParams;
-  let disable_download = downloadLink.length > 2000;
+  let disable_download = downloadLink.length > 7000;
 
   const mustFilterBoxes = mustFilters.map(row =>
     <RedcapFilter data={get_data(row)} key={row} remove={remove_must_filter} fetch={add_must_cohort}/>
