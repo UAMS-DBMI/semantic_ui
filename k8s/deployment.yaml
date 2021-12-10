@@ -4,7 +4,7 @@ metadata:
   name: sui-demo
 spec:
   ports:
-  - port: 80
+    - port: 80
   selector:
     app: sui-demo
   clusterIP: None
@@ -29,22 +29,22 @@ spec:
           configMap:
             name: sui-sites-enabled-configmap
       containers:
-      - image: tcia/prism-sui-demo:latest
-        name: sui-react
-        ports:
-        - containerPort: 80
+        - image: tcia/prism-sui-demo:latest
           name: sui-react
-        env:
-        - name: REACT_APP_API_URL
-          value: http://sui-demo-prism.apps.dbmi.cloud/
-        volumeMounts:
-          - name: nginx-conf
-            mountPath: /etc/nginx/conf.d/
-      - image: tcia/prism-sapi:latest
-        name: sui-sapi
-        ports:
-        - containerPort: 3000
+          ports:
+            - containerPort: 80
+              name: sui-react
+          envFrom:
+            - configMapRef:
+                name: url-configmap
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d/
+        - image: tcia/prism-sapi:latest
           name: sui-sapi
-        env:
-        - name: SEMAPI_TRIPLESTORE_URL
-          value: http://triplestore-prism.apps.dbmi.cloud/repositories/prism
+          envFrom:
+            - configMapRef:
+                name: url-configmap
+          ports:
+            - containerPort: 3000
+              name: sui-sapi

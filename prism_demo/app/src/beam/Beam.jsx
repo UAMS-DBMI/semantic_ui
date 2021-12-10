@@ -83,7 +83,7 @@ function FilterBox(props) {
 
   return (
     <div className="filter_div">
-      <span className="filter_type">{props.must} Have</span>
+      <span className="filter_type">{props.must} Criteria</span>
       <div className="filter_container">
         <div className="filter_spreader">
           <div className="filter_search_box">
@@ -454,11 +454,11 @@ function Beam() {
       }
       <div className="filters">
         <div className="filter_item_container">
-          <FilterBox must="MUST" data={config} added={add_must_filter}/>
+          <FilterBox must="Inclusion" data={config} added={add_must_filter}/>
           {mustFilterBoxes}
         </div>
         <div className="filter_item_container">
-          <FilterBox must="CANNOT" data={config} added={add_cannot_filter}/>
+          <FilterBox must="Exclusion" data={config} added={add_cannot_filter}/>
           {cannotFilterBoxes}
         </div>
       </div>

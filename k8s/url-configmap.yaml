@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: url-configmap
+data:
+  REACT_APP_API_URL: http://sui-demo-prism.apps.dbmi.cloud/
+  SEMAPI_TRIPLESTORE_URL: http://triplestore-prism.apps.dbmi.cloud/repositories/prism

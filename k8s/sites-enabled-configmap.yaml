@@ -16,9 +16,6 @@ data:
 
       proxy_cache one;
 
-      # set the correct host(s) for your site
-      server_name "sui-demo-prism.apps.dbmi.cloud";
-
       access_log /var/log/nginx/access.log combined;
       error_log  /var/log/nginx/error.log warn;
 
