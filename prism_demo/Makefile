@@ -1,5 +1,5 @@
 last_built: Dockerfile
-	docker build . -t tcia/prism-sui-demo
+	docker build . -t tcia/prism-sui
 
 push:
-	docker push tcia/prism-sui-demo
+	docker push tcia/prism-sui

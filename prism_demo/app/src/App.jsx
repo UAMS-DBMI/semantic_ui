@@ -1,7 +1,7 @@
 import './App.css';
 import Beam from './beam/Beam';
 import Home from './Home';
-import logo from './TCIA-logo.png';
+import logo from './PRISM-logo.png';
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,29 +16,11 @@ function App() {
         <nav className="header">
           <div className="header_top">
             <div className="header_side">
-              <a href="https://www.cancerimagingarchive.net/primary-data/" className="header_link">
-                Submit Your Data
-              </a>
-              <a href="https://www.cancerimagingarchive.net/access-data/" className="header_link">
-                Access the Data
-              </a>
-              <a href="https://www.cancerimagingarchive.net/support/" className="header_link">
-                Help
-              </a>
             </div>
             <Link to="/">
-              <img src={logo} alt="ARIES" className="logo"/>
+              <img src={logo} alt="PRISM" className="logo"/>
             </Link>
             <div className="header_side">
-              <a href="https://www.cancerimagingarchive.net/about-the-cancer-imaging-archive-tcia/" className="header_link">
-                About Us
-              </a>
-              <a href="https://www.cancerimagingarchive.net/publications/" className="header_link">
-                Research Activities 
-              </a>
-              <a href="https://www.cancerimagingarchive.net/news/" className="header_link">
-                News 
-              </a>
             </div>
           </div>
           <h1 className="header_title">Semantic Search Cohort Builder</h1>
