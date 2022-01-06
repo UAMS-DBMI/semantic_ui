@@ -272,7 +272,10 @@ function Beam() {
     let opts = {method: 'POST',
                 body: JSON.stringify(
                   {'patient_ids': currentCohort}
-                  )
+                  ),
+                headers: {
+                  'Content-Type': 'application/json'
+                  },
                 };
     const response = await fetch(url, opts);
     let data = await response.json();
