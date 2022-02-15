@@ -88,9 +88,10 @@ STAGE_OPT = """
 ?stage_class rdfs:label ?stagelabel .
 """
 
+
 def all_from_patient_ids(patient_ids):
     formatted_ids = ["'{}'".format(x) for x in patient_ids]
-    filter_line = "values ?patient_id {{{}}} .".format(' '.join(formatted_ids))
+    filter_line = "values ?patient_id {{{}}} .".format(" ".join(formatted_ids))
     query = f"""{PREFIX}
     select distinct ?collection ?patient_id ?sexlabel ?age ?location ?disease_type ?stagelabel {{
         {filter_line}
@@ -129,9 +130,10 @@ def all_from_patient_ids(patient_ids):
     }}"""
     return query
 
+
 def ids_from_stage_uris(stage_uris):
     formatted_uris = ["<{}>".format(x) for x in stage_uris]
-    long_string = ','.join(formatted_uris)
+    long_string = ",".join(formatted_uris)
     filter_line = f"filter(?stage_class in ({long_string})) ."
     query = f"""{PREFIX}
     select distinct ?patient_id ?stage_class {{
@@ -146,7 +148,7 @@ def ids_from_stage_uris(stage_uris):
 
 def ids_from_location_uris(location_uris):
     formatted_uris = ["<{}>".format(x) for x in location_uris]
-    long_string = ','.join(formatted_uris)
+    long_string = ",".join(formatted_uris)
     filter_line = f"filter(?loctype in ({long_string})) ."
     query = f"""{PREFIX}
     select distinct ?patient_id ?loctype {{
@@ -157,9 +159,10 @@ def ids_from_location_uris(location_uris):
     }}"""
     return query
 
+
 def ids_from_sex_uris(sex_uris):
     formatted_uris = ["<{}>".format(x) for x in sex_uris]
-    long_string = ','.join(formatted_uris)
+    long_string = ",".join(formatted_uris)
     filter_line = f"filter(?sexclass in ({long_string})) ."
     query = f"""{PREFIX}
     select distinct ?patient_id ?sexclass {{
@@ -169,9 +172,10 @@ def ids_from_sex_uris(sex_uris):
     }}"""
     return query
 
+
 def ids_from_disease_uris(disease_uris):
     formatted_uris = ["<{}>".format(x) for x in disease_uris]
-    long_string = ','.join(formatted_uris)
+    long_string = ",".join(formatted_uris)
     filter_line = f"filter(?dt in ({long_string})) ."
     query = f"""{PREFIX}
     select distinct ?patient_id ?dt {{
@@ -182,6 +186,7 @@ def ids_from_disease_uris(disease_uris):
     }}"""
     return query
 
+
 def all_age():
     query = f"""{PREFIX}
     select distinct ?patient_id ?age {{
@@ -190,6 +195,7 @@ def all_age():
         {AGE}
     }}"""
     return query
+
 
 def collection_metadata():
     return """PREFIX collection: <http://purl.org/PRISM#PRISM_0000001>
@@ -209,6 +215,7 @@ select ?name ?link ?desc ?tl {
     ?t rdfs:label ?tl .
     ?t rdfs:subClassOf data_item: .
 } order by ?name"""
+
 
 def collection_counts():
     return """PREFIX collection: <http://purl.org/PRISM#PRISM_0000001>
@@ -235,6 +242,7 @@ select ?collection (count(?patient_id) as ?patient_count) {
 
 } group by ?collection"""
 
+
 def labels_by_subclass(uri):
     return f"""PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -245,42 +253,56 @@ def labels_by_subclass(uri):
         optional {{ ?value <http://purl.obolibrary.org/obo/IAO_0000115> ?definition . }}
     }} order by ?label"""
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import requests
+
     def _make_sparql_query(query, triplestore_url):
-        payload = {'query': query}
-        headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/sparql-results+json'}
+        payload = {"query": query}
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/sparql-results+json",
+        }
         r = requests.post(triplestore_url, data=payload, headers=headers)
         r.raise_for_status()
         ret = []
         results = r.json()
-        vars = results['head']['vars']
-        for row in results['results']['bindings']:
+        vars = results["head"]["vars"]
+        for row in results["results"]["bindings"]:
             new_row = {}
             for var in vars:
                 if var in row.keys():
-                    new_row[var] = row[var]['value']
+                    new_row[var] = row[var]["value"]
             ret.append(new_row)
         return ret
-    triplestore_url = 'http://triplestore-prism.apps.dbmi.cloud/rdf4j-server/repositories/prism'
-    patient_ids = ['C3L-02219', 'C3N-02451', 'C3L-00016', 'BreastDX-01-0038']
+
+    triplestore_url = (
+        "http://triplestore-prism.apps.dbmi.cloud/rdf4j-server/repositories/prism"
+    )
+    patient_ids = ["C3L-02219", "C3N-02451", "C3L-00016", "BreastDX-01-0038"]
     query = all_from_patient_ids(patient_ids)
     print(query)
     print(f"all {len(_make_sparql_query(query, triplestore_url))}")
-    disease_uris = ['http://purl.obolibrary.org/obo/NCIT_C136709', 'http://purl.obolibrary.org/obo/NCIT_C4105']
+    disease_uris = [
+        "http://purl.obolibrary.org/obo/NCIT_C136709",
+        "http://purl.obolibrary.org/obo/NCIT_C4105",
+    ]
     query = ids_from_disease_uris(disease_uris)
     print(f"disease {len(_make_sparql_query(query, triplestore_url))}")
-    location_uris = ['http://purl.obolibrary.org/obo/UBERON_0001872', 'http://purl.obolibrary.org/obo/UBERON_0006518']
+    location_uris = [
+        "http://purl.obolibrary.org/obo/UBERON_0001872",
+        "http://purl.obolibrary.org/obo/UBERON_0006518",
+    ]
     query = ids_from_location_uris(location_uris)
     print(f"location {len(_make_sparql_query(query, triplestore_url))}")
-    sex_uris = ['http://purl.obolibrary.org/obo/PATO_0000384']
+    sex_uris = ["http://purl.obolibrary.org/obo/PATO_0000384"]
     query = ids_from_sex_uris(sex_uris)
     print(f"sex {len(_make_sparql_query(query, triplestore_url))}")
-    stage_uris = ['http://purl.obolibrary.org/obo/NCIT_C28054']
+    stage_uris = ["http://purl.obolibrary.org/obo/NCIT_C28054"]
     query = ids_from_stage_uris(stage_uris)
     print(f"stage {len(_make_sparql_query(query, triplestore_url))}")
     query = all_age()
     print(f"ages {len(_make_sparql_query(query, triplestore_url))}")
-    query = labels_by_subclass('http://purl.obolibrary.org/obo/UBERON_0001062')
+    query = labels_by_subclass("http://purl.obolibrary.org/obo/UBERON_0001062")
     print(query)
     print(f"labels {len(_make_sparql_query(query, triplestore_url))}")
