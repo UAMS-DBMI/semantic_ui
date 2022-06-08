@@ -14,6 +14,8 @@ TRIPLESTORE_URL = os.getenv(
     "SEMAPI_TRIPLESTORE_URL", "http://triplestore:7200/repositories/prism"
 )
 
+CONFIG = None
+
 
 def make_sparql_query(query, params={}):
     payload = {"query": query}
@@ -62,8 +64,18 @@ def make_data_table_query(query, params={}):
 app = FastAPI()
 
 
+@app.get("/v1/config/reset")
+def reset_config():
+    global CONFIG
+    CONFIG = None
+    return "Cache Reset"
+
+
 @app.get("/v1/config")
 def get_config():
+    global CONFIG
+    if CONFIG != None:
+        return CONFIG
     config = [
         {
             "choices": [
@@ -87,80 +99,101 @@ def get_config():
     # lung located diseases
     query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/NCIT_C27669")
     lung_opts = make_sparql_query(query)
-    config.append(
-        {
-            "type": "radio",
-            "api": "disease",
-            "name": "Lung Diseases",
-            "label": "Diseases located in the lung.",
-            "choices": lung_opts,
-        }
-    )
+    if len(lung_opts) > 0:
+        config.append(
+            {
+                "type": "radio",
+                "api": "disease",
+                "name": "Lung Diseases",
+                "label": "Diseases located in the lung.",
+                "choices": lung_opts,
+            }
+        )
 
     # brain located diseases
     query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/NCIT_C26835")
     brain_opts = make_sparql_query(query)
-    config.append(
-        {
-            "type": "radio",
-            "api": "disease",
-            "name": "Brain Diseases",
-            "label": "Diseases located in the brain.",
-            "choices": brain_opts,
-        }
-    )
+    if len(brain_opts) > 0:
+        config.append(
+            {
+                "type": "radio",
+                "api": "disease",
+                "name": "Brain Diseases",
+                "label": "Diseases located in the brain.",
+                "choices": brain_opts,
+            }
+        )
 
     # breast located diseases
     query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/NCIT_C26709")
     breast_opts = make_sparql_query(query)
-    config.append(
-        {
-            "type": "radio",
-            "api": "disease",
-            "name": "Breast Diseases",
-            "label": "Diseases located in the breast.",
-            "choices": breast_opts,
-        }
-    )
+    if len(breast_opts) > 0:
+        config.append(
+            {
+                "type": "radio",
+                "api": "disease",
+                "name": "Breast Diseases",
+                "label": "Diseases located in the breast.",
+                "choices": breast_opts,
+            }
+        )
 
     # stage information
     query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/NCIT_C28108")
     stage_opts = make_sparql_query(query)
-    config.append(
-        {
-            "type": "radio",
-            "api": "stage",
-            "name": "Cancer Stage",
-            "label": "The extent of a cancer in the body. Staging is usually based on the size of the tumor, whether lymph nodes contain cancer, and whether the cancer has spread from the original site to other parts of the body.",
-            "choices": stage_opts,
-        }
-    )
+    if len(stage_opts) > 0:
+        config.append(
+            {
+                "type": "radio",
+                "api": "stage",
+                "name": "Cancer Stage",
+                "label": "The extent of a cancer in the body. Staging is usually based on the size of the tumor, whether lymph nodes contain cancer, and whether the cancer has spread from the original site to other parts of the body.",
+                "choices": stage_opts,
+            }
+        )
 
     # locations
     query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/UBERON_0001062")
     location_opts = make_sparql_query(query)
-    config.append(
-        {
-            "type": "radio",
-            "name": "Location",
-            "api": "location",
-            "label": "The primary location of the disease.",
-            "choices": location_opts,
-        }
-    )
+    if len(location_opts) > 0:
+        config.append(
+            {
+                "type": "radio",
+                "name": "Location",
+                "api": "location",
+                "label": "The primary location of the disease.",
+                "choices": location_opts,
+            }
+        )
 
     # brain locations
     query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/UBERON_0016526")
     location_opts = make_sparql_query(query)
-    config.append(
-        {
-            "type": "radio",
-            "name": "Brain Lobes",
-            "api": "location",
-            "label": "Lobes of the brain.",
-            "choices": location_opts,
-        }
-    )
+    if len(location_opts) > 0:
+        config.append(
+            {
+                "type": "radio",
+                "name": "Brain Lobes",
+                "api": "location",
+                "label": "Lobes of the brain.",
+                "choices": location_opts,
+            }
+        )
+
+    # colon locations
+    query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/NCIT_C26801")
+    location_opts = make_sparql_query(query)
+    if len(location_opts) > 0:
+        config.append(
+            {
+                "type": "radio",
+                "name": "Colon Diseases",
+                "api": "disease",
+                "label": "Diseases of the colon.",
+                "choices": location_opts,
+            }
+        )
+    CONFIG = config
     return config
 
 

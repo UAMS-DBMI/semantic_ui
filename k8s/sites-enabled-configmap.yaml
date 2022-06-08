@@ -34,7 +34,7 @@ data:
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $http_host;
 
-        proxy_pass http://app_server/;
+        proxy_pass http://app_server/v1/;
 
         proxy_cache_valid any 30m;
       }
