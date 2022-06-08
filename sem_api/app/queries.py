@@ -254,6 +254,16 @@ def labels_by_subclass(uri):
     }} order by ?label"""
 
 
+def labels_by_uri(uri):
+    return f"""PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    select distinct ?value ?label ?definition where {{
+        bind(uri(<{uri}>) as ?value) .
+        ?value rdfs:label ?label .
+        optional {{ ?value <http://purl.obolibrary.org/obo/IAO_0000115> ?definition . }}
+    }} order by ?label"""
+
+
 if __name__ == "__main__":
     import requests
 

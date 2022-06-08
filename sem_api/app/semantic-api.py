@@ -181,18 +181,35 @@ def get_config():
         )
 
     # colon locations
-    query = queries.labels_by_subclass("http://purl.obolibrary.org/obo/NCIT_C26801")
-    location_opts = make_sparql_query(query)
-    if len(location_opts) > 0:
+    opts = []
+    classes = [
+        "http://purl.obolibrary.org/obo/NCIT_C9242",
+        "http://purl.obolibrary.org/obo/NCIT_C7418",
+        "http://purl.obolibrary.org/obo/NCIT_C9305",
+        "http://purl.obolibrary.org/obo/NCIT_C2894",
+        "http://purl.obolibrary.org/obo/NCIT_C4774",
+        "http://purl.obolibrary.org/obo/NCIT_C2852",
+        "http://purl.obolibrary.org/obo/NCIT_C26712",
+        "http://purl.obolibrary.org/obo/NCIT_C2853",
+        "http://purl.obolibrary.org/obo/NCIT_C66745",
+        "http://purl.obolibrary.org/obo/NCIT_C2916",
+        "http://purl.obolibrary.org/obo/NCIT_C3727",
+    ]
+    for c in classes:
+        query = queries.labels_by_uri(c)
+        opt = make_sparql_query(query)
+        opts += opt
+    if len(opts) > 0:
         config.append(
             {
                 "type": "radio",
                 "name": "Colon Diseases",
                 "api": "disease",
                 "label": "Diseases of the colon.",
-                "choices": location_opts,
+                "choices": opts,
             }
         )
+
     CONFIG = config
     return config
 
